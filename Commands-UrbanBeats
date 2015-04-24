@@ -1,0 +1,4 @@
+Start app
+DEBUG=urbanbeats ./bin/www
+kill port
+fuser -k 3000/tcp
