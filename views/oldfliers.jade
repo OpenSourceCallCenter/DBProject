@@ -46,11 +46,16 @@ html
     | &#x9;
     | &#x9;
     style.
-      p {text-align: left; margin-top:24px}
+      p {background: url('img/advertize2.jpg') no-repeat 0px 20px; 
+      height: 300px; 
+      padding: 30px;
+      font-size: 30px;
+      color: white;
+      }
       th, td {
       overflow: hidden;
       width: 100px;
-      height: 25px;
+      height: 125px;
       vertical-align: top;
       padding: 5px;
       }
@@ -90,7 +95,9 @@ html
             li
               a(href='/myinfo') My Info
           | &#x9; 
-          |       
+          |   
+          br
+          button.btn.btn-default.btn-lg(type='submit') Choose this    
           .table-responsive
             table.table
               thead
@@ -111,7 +118,6 @@ html
                     td
                       p= item
             | &#x9;  
-            button.btn.btn-default.btn-lg(type='submit') Choose this
     | &#x9;
     |  
     |     
