@@ -30,8 +30,8 @@ function query_db(req,response) {
 							array_names.push(String(rows[row].first_name));
 							count++;
 						}
-						console.log("data pushed + " + count + "	" + array_names.toArray());					
-						output_render(response,count,array_names.toArray());
+						console.log("data pushed + " + count + "	" + array_names);					
+						output_render(response,count,array_names);
 					} 
 					else {
 						// display error msg for unauthenticated user
