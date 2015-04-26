@@ -8,6 +8,7 @@ var stylus = require('stylus');
 var bodyParser = require('body-parser');
 var contacts = require('./routes/contacts');
 var nib = require('nib');
+var nodemailer = require('nodemailer');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -88,6 +89,7 @@ app.get('/businessview', businessview.do_work);
 app.get('/myinfo', myinfo.do_work);
 
 app.get('/oldfliers', oldfliers.do_work);
+app.post('/updateflier', oldfliers.do_updateflier);
 
 app.get('/prepflier', prepflier.do_work);
 app.post('/addflier', prepflier.do_addflier);

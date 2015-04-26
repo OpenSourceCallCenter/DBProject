@@ -7,6 +7,8 @@ var connection = {
 }
 
 exports.do_work = function(req, res){
+  // var timestamp = Number(new Date()); 
+  // console.log("Creating Business in_fields +    " + timestamp + "       " + randStr);
   res.render('businessadmin.jade', { 
 	  title: 'Urban Beats' 
   });
@@ -49,7 +51,7 @@ function query_db(req,res){
     	console.log("Error connecting to db + " + err);
     }
     console.log("Connected DB");
-    connection.query("select business_id from Business order by Date desc limit 1;", function(err, rows, fields) {
+    connection.query("select count(*) as count from Business order by Date desc limit 1;", function(err, rows, fields) {
 			if(err){
 				console.log("Error while selection into table +" + err);
 			}
@@ -58,11 +60,13 @@ function query_db(req,res){
 				    // display error message to tell unique business id not fetched 
 				}
 				else {
-					var business_val = (parseInt(rows[0].business_id) + 1);
+					var business_val = (parseInt(rows[0].count) + 1);
+                    var randStr = Math.random().toString(36).substring(7);
+                    var businessid = "--" + randStr + business_val;
         			var member_since = getDateTime();
     			    var categories = String(req.body.category).replace(',',';');
-    			    console.log("values sent to db + " +  " business_id: " + business_val + " name: " + req.body.bname +  " full_address: " + req.body.baddr + " city: " + req.body.city + " state: " + req.body.state + " categories: " + categories + " email: " + req.body.email +  " Date: " + member_since);
-    			    var values= {business_id:business_val, name:req.body.bname, full_address:req.body.baddr, city:req.body.city, state:req.body.state, stars:0.0, review_count:0, categories:categories, open:1, email:req.body.email, Date:member_since};
+    			    console.log("values sent to db + " +  " business_id: " + businessId + " name: " + req.body.bname +  " full_address: " + req.body.baddr + " city: " + req.body.city + " state: " + req.body.state + " categories: " + categories + " email: " + req.body.email +  " Date: " + member_since);
+    			    var values= {business_id:businessid, name:req.body.bname, full_address:req.body.baddr, city:req.body.city, state:req.body.state, stars:0.0, review_count:0, categories:categories, open:1, email:req.body.email, Date:member_since};
     			    // inserting rows
     			    connection.query('INSERT INTO Business SET ?',values,function(in_err,in_rows,in_fields){
     				console.log("After Insert Query");

@@ -74,7 +74,7 @@ html
     |   
     |     
     .container
-      form(name='aForm', role='form')
+      form(name='aForm',action = '/updateflier', method = 'post')
         .form-group
           h2
             br
@@ -114,7 +114,7 @@ html
                     td
                       .checkbox
                         label
-                          input.check(type='checkbox', name='finallevelusers[]')
+                          input.check(type='checkbox', name='finallevelusers[]' value = '#{item}')
                     td
                       p= item
             | &#x9;  
