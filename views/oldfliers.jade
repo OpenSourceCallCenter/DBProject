@@ -100,7 +100,7 @@ html
           | &#x9; 
           |   
           br
-          button.btn.btn-default.btn-lg(type='submit') Deal    
+          button.btn.btn-default.btn-lg(type='submit') Activate this!    
           .table-responsive
             table.table
               thead
@@ -108,11 +108,22 @@ html
                   th
                     | Choose
                   | &#x9;&#x9;&#x9;
-                  |             
-                  th Flyers
+                  | 
+                  th
+                    | Flyers
+                  | &#x9;&#x9;&#x9;
+                  | 
+                  th
+                    | Success Rate
+                  | &#x9;&#x9;&#x9;
+                  | 
+                  th
+                    | Flyer ID
+                  | &#x9;&#x9;&#x9;
+                  |          
               |         
               tbody
-                - each item in variables.arrnames
+                - each item,index in variables.arrnames
                   tr
                     td
                       .checkbox
@@ -120,6 +131,10 @@ html
                           input.check(type='checkbox', name='finallevelusers[]' value = '#{item}')
                     td
                       p= item
+                    td
+                      p(style='color:black;background-image: none;')= index
+                    td
+                      p(style='color:black;background-image: none;')= variables.arrnames[index]
             | &#x9;  
     | &#x9;
     |  
