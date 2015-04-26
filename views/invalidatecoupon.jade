@@ -2,8 +2,7 @@ doctype html
 html
   head
     title Urban Beats
-    |   
-    |   
+    |     
     script(type='text/javascript').
       function disableHandler (form, inputName) {
       var inputs = form.elements[inputName];
@@ -36,30 +35,22 @@ html
       }
       }
       }
-    |   
-    |   
-    |   
     |     
     meta(name='viewport', content='width=device-width, initial-scale=1')
     |     
     link(rel='stylesheet', href='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css')
-    | &#x9;
-    | &#x9;
+    |     
     style.
-      p {background: url('img/advertize2.jpg') no-repeat 0px 20px; 
-      height: 300px; 
-      padding: 30px;
-      font-size: 30px;
-      color: white;
-      }
+      p {text-align: left; margin-top:24px}
       th, td {
       overflow: hidden;
       width: 100px;
-      height: 125px;
+      height: 25px;
       vertical-align: top;
       padding: 5px;
       }
       .headings{text-align:center;}
+    |     
     link(href='http://fonts.googleapis.com/css?family=Oxygen:400,300,700', rel='stylesheet', type='text/css')
   |   
   body
@@ -68,61 +59,87 @@ html
       .container.topnav
         // Brand and toggle get grouped for better mobile display
         .navbar-header
-          a.navbar-brand.topnav1(href='/')
+          a.navbar-brand.topnav1(href='index.html')
             b Urban Beats
       // /.container
-    |   
     |     
     .container
       form(name='aForm', role='form')
         .form-group
-          h2
-            br
-          | &#x9;  
-          h2 Your previous deals!
-          |      
-          | &#x9; 
+          br
+          br
+          br
+          | &#x9;&#x9;
           ul.nav.nav-tabs(role='tablist')
             li
               a(href='/businessview') Who&apos;s There
             |         
             li
-              a(href='/prepflier') Prepare Flyer
+              a(href='/prepFlier') Prepare Flyer
+            |  
             | &#x9;&#x9;
-            li.active
+            li
               a(href='/oldfliers') Previous Flyers
             | &#x9;&#x9;
             li
               a(href='/myinfo') My Info
             | &#x9;&#x9;
-            li
+            li.active
               a(href='/invalidate') Invalidate Coupon
-          | &#x9; 
-          |   
-          br
-          button.btn.btn-default.btn-lg(type='submit') Deal    
+          |           
+          h3 Enter the Flyer ID
+          |           
+          input(type='text', name='', value='', size='40')
+          |           
           .table-responsive
             table.table
               thead
                 tr.headings
                   th
                     | Choose
-                  | &#x9;&#x9;&#x9;
-                  |             
-                  th Flyers
-              |         
+                  |                   
+                  th Name
+                  |                   
+                  th Coupon ID
+              |               
               tbody
-                - each item in variables.arrnames
-                  tr
-                    td
-                      .checkbox
-                        label
-                          input.check(type='checkbox', name='finallevelusers[]')
-                    td
-                      p= item
-            | &#x9;  
-    | &#x9;
-    |  
+                tr
+                  td
+                    .checkbox
+                      label
+                        input.check(type='checkbox', name='finallevelusers[]')
+                  |                   
+                  td
+                    p Name1
+                  |                   
+                  td
+                    p coupon1
+                |                 
+                tr
+                  td
+                    .checkbox
+                      label
+                        input.check(type='checkbox', name='finallevelusers[]')
+                  |                   
+                  td
+                    p Name2
+                  |                   
+                  td
+                    p coupon2
+                |                 
+                tr
+                  td
+                    .checkbox
+                      label
+                        input.check(type='checkbox', name='finallevelusers[]')
+                  |                   
+                  td
+                    p Name3
+                  |                   
+                  td
+                    p coupon3
+            |             
+            button.btn.btn-default.btn-lg(type='submit') Invalidate Coupon
     |     
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
     |     
