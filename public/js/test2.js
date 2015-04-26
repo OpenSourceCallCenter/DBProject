@@ -1,4 +1,10 @@
 
+	$(document).ready(function() {
+          $('#example').dataTable( {
+              "pagingType": "full_numbers"
+          } );
+      } );
+	
     function disableHandler (form, inputName) {
     var inputs = form.elements[inputName];
     for (var i = 0; i < inputs.length; i++) {

@@ -1,22 +1,51 @@
 doctype html(lang='en')
 head
-    title Urban Beats
+    meta(charset='UTF-8')
     |     
-    meta(charset='utf-8')
+    title Example of Bootstrap 3 Pager
     |     
-    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css')
     |     
-    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css')
     |     
-    meta(name='description', content='')
+    link(rel='stylesheet', href='http://cdn.datatables.net/1.10.6/css/jquery.dataTables.css')
     |     
-    meta(name='author', content='')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')
     |     
-    script(src='js/test2.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js')
     |     
-    link(href='stylesheets/newstyle.css', rel='stylesheet')
+    script(src='http://code.jquery.com/jquery-1.11.1.min.js')
     |     
-    link(href='stylesheets/bootstrap.min.css', rel='stylesheet')   
+    script(src='http://cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js')
+    |     
+    script(type='text/javascript').
+      $(document).ready(function() { $('#example').dataTable( { "pagingType": "full_numbers"});});
+    | 
+    script(type='text/javascript', language='JavaScript').
+      function HideContent(d) {
+      document.getElementById(d).style.display = "none";
+      }
+      function ShowContent(d) {
+      document.getElementById(d).style.display = "block";
+      }
+      function ReverseDisplay(d) {
+      if(document.getElementById(d).style.display == "none") { document.getElementById(d).style.display = "block"; }
+      else { document.getElementById(d).style.display = "none"; }
+      }    
+    style.
+      .bs-example {
+      margin: 20px;
+      }
+      .pos_fixed {
+      position: absolute;
+      top: 72px;
+      right: -590px;
+      }
+      .pos_fixed2 {
+      position: fixed;
+      top: 600px;
+      right: 900px;
+      }  
   body
     .container
       .row
@@ -45,9 +74,6 @@ head
               |             
               .navbar-collapse.collapse.sidebar-navbar-collapse
                 ul.nav.navbar-nav
-                  li.active
-                    a(href='#') Refine your taste!
-                  |                 
                   .container
                     li Rating
                     |                   
@@ -113,83 +139,97 @@ head
                       label
                         input(type='checkbox', onclick="window.location='http://www.google.com'; return true;")
                         | Yes
-        |       
-        .col-sm-9
-          table.table1
-            thead
-              tr.headings
-                th
-                  | All You Want
-            |           
-            tbody
-              tr
-                td
-                  | Company 1
-                  br
-                  | Address 1
-                  br
-                  | Ratings 1
-                  br
-                  | Total Reviews 1
-                  br
-                  p
-                    a#example-show.showLink(href='#', onclick="showHide('example');return false;") See Pictures
-                  |       
-                  #example.more
-                    iframe(src='pictures.html', width='400', height='250')
-                    |          
-                    p
-                      a#example-hide.hideLink(href='#', onclick="showHide('example');return false;") Hide Pictures
-              |             
-              tr
-                td
-                  | Company 2
-              |             
-              tr
-                td
-                  | Company 3
-          |         
-          br
-          |         
+    table#example.display(cellspacing='0', width='80%')
+      thead
+        tr
+          th All You Want
+      |       
+      tbody
+        tr
+          td 
+            | Company 1
+            br
+            | Address 1
+            br
+            | Ratings 1
+            br
+            | Total Reviews 1
+            br
+            p
+            #uniquename(style='display:none;')
+              iframe(src='pictures.html', width='400', height='250')
+            p
+              a(href="javascript:ReverseDisplay('uniquename')")
+                | View Pictures
+        |         
+        tr
+          td Garrett Winters
+        |         
+        tr
+          td Jonas Alexander
+        |         
+        tr
+          td Shad Decker
+        | 
+        tr
+          td Shad Decker
+        | 
+        tr
+          td Shad Decker
+        | 
+        tr
+          td Shad Decker
+        | 
+        tr
+          td Shad Decker
+        | 
+        tr
+          td Shad Decker
+        | 
+        tr
+          td Shad Decker
+        | 
+        tr
+          td Shad Decker
+        | 
+        tr
+          td Shad Decker
+        |         
+        tr
+          td Michael Bruce
+        |         
+        tr
+          td Donna Snider
+        .pos_fixed2
           button.btn.btn-default.btn-lg(type='submit') Notify All
-        |       
-        .pos_fixed
-          .col-sm-3
-            .sidebar-nav
-              .navbar.navbar-default(role='navigation')
-                .navbar-header
-                  button.navbar-toggle(type='button', data-toggle='collapse', data-target='.sidebar-navbar-collapse')
-                    span.sr-only Toggle navigation
-                    |                 
-                    span.icon-bar
-                    |                 
-                    span.icon-bar
-                    |                 
-                    span.icon-bar
-                  |                 
-                  span.visible-xs.navbar-brand Sidebar menu
-                |               
-                .navbar-collapse.collapse.sidebar-navbar-collapse
-                  ul.nav.navbar-nav
-                    li.active
-                      a(href='#') Premium Flyers
-                    |                   
-                    .container
-                      li Flyer1
-                      |                     
-                      br
-                      |                     
-                      li Flyer2
-                      |                     
-                      br
-                      |                     
-                      li Flyer3
-                      |                     
-                      br
-      |     
-      script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
-      |     
-      script(src='js/bootstrap.min.js')   
-  script(type='text/javascript').
-    disableHandler(document.forms.aForm, 'finallevelusers[]');
-    disableHandler(document.forms.bForm, 'finallevelusers[]');
+    .pos_fixed
+      .col-sm-3
+        .sidebar-nav
+          .navbar.navbar-default(role='navigation')
+            .navbar-header
+              button.navbar-toggle(type='button', data-toggle='collapse', data-target='.sidebar-navbar-collapse')
+                span.sr-only Toggle navigation
+                |                 
+                span.icon-bar
+                |                 
+                span.icon-bar
+                |                 
+                span.icon-bar
+              |                 
+              span.visible-xs.navbar-brand Sidebar menu
+            |               
+            .navbar-collapse.collapse.sidebar-navbar-collapse
+              ul.nav.navbar-nav
+                .container
+                  li Flyer1
+                  |                     
+                  br
+                  |                     
+                  li Flyer2
+                  |                     
+                  br
+                  |                     
+                  li Flyer3
+                  |                     
+                  br  
+        
