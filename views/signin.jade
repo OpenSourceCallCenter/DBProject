@@ -39,10 +39,11 @@ html
             b Urban Beats
       // /.container
     .main
-      form(name='myForm', action = '/signinuser', method = 'post')
+      form(name='myForm', action = '/auth/facebook')
         .submit1
           input(type='submit', onclick='myFunction()', value='Login with Facebook')
-        .clear  
+        .clear
+      form(name='myForm', action = '/signinuser', method = 'post')
         h2 Or Use your email ID
         .lable-2
           input.text(type='text', name='fname', value='your@email.com ', onfocus="this.value = '';", onblur="if (this.value == '') {this.value = 'your@email.com ';}")

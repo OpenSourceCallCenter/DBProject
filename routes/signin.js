@@ -20,6 +20,8 @@ exports.do_authenticate = function(request, response){
 	query_db(response,request.body.fname,request.body.pwd);
 };
 
+
+
 function query_db(response,fname,pwd) {
 	var connection_pool = mysql.createPool(connection);
 	connection_pool.getConnection(function(err, connection){

@@ -1,5 +1,11 @@
 var express = require('express');
+var passport = require('passport');
+var util = require('util');
+var FacebookStrategy = require('passport-facebook');
+var config = require('./configuration/config');
+var mysql = require('mysql');
 var path = require('path');
+var session = require('express-session');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var newSession = require('client-sessions');
@@ -10,6 +16,13 @@ var contacts = require('./routes/contacts');
 var nib = require('nib');
 var nodemailer = require('nodemailer');
 
+var connection = mysql.createConnection({
+  host     : config.host,
+  user     : config.username,
+  password : config.password,
+  database : config.database
+});
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var signin = require('./routes/signin');
@@ -19,12 +32,56 @@ var useroptions = require('./routes/useroptions');
 var businessadmin = require('./routes/businessadmin');
 var businessview = require('./routes/businessview');
 var myinfo = require('./routes/myinfo');
+var invalidatecoupon = require('./routes/invalidate');
 var oldfliers = require('./routes/oldfliers');
 var prepflier = require('./routes/prepflier');
 
 var app = express();
 
-//var bodyParser = require('body-parser');
+// Passport session setup.
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+
+passport.use(new FacebookStrategy({
+    clientID: '957496190961738',
+    clientSecret:'329cba0e2b6eb60c49fec2a31699c96e' ,
+    callbackURL: 'http://localhost:3000/auth/facebook/callback'
+  },
+  function(accessToken, refreshToken, profile, done) {
+    process.nextTick(function () {
+      //Check whether the User exists or not using profile.id
+      //console.log("Values :" + user.emails[0].value);
+      if(config.use_database==='true')
+      {
+      connection.query("SELECT * from user_info where user_id="+profile.id,function(err,rows,fields){
+        if(err) throw err;
+        if(rows.length===0)
+          {
+            console.log("There is no such user, adding now");
+            connection.query("INSERT into user_info(user_id,user_name) VALUES('"+profile.id+"','"+profile.username+"')");
+          }
+          else
+            {
+              console.log("User already exists in database");
+            }
+          });
+      }
+      return done(null, profile);
+    });
+  }
+));
+
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/login')
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,6 +93,7 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({ secret: 'keyboard cat', key: 'sid'}));
 app.use(cookieParser());
 app.use(newSession({
   cookieName: 'newSession',
@@ -57,7 +115,9 @@ app.use(stylus.middleware(
   , compile: compile
   }
 ));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session());
+//app.use(express.static(path.join(__dirname, 'public')));
 
 //app.use('/', routes);
 //app.use('/users', users);
@@ -66,11 +126,31 @@ app.get('/', routes.do_work);
 // for sign-in registered user
 app.get('/signin', signin.do_work);
 app.post('/signinuser', signin.do_authenticate);
+//app.post('/signinFB', signin.do_facebooklogin);
 
 // for registering a new user
 app.get('/signup', signup.do_work);
 app.post('/signupuser', signup.do_register);
 
+// for sign-in via Facebook
+app.get('/account', ensureAuthenticated, function(req, res){
+  res.render('account', { user: req.user });
+});
+
+app.get('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
+
+
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { successRedirect : '/test', failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/test');
+  });
+  
+app.get('/test', function(req, res){
+	console.log(req.user);
+  //res.render('/index', { user: req.user });
+});
+  
 // for sign-in registered business
 app.get('/businesslogin', businesslogin.do_work);
 app.post('/businessauthenticate', businesslogin.do_authenticate);
@@ -87,6 +167,7 @@ app.post('/businessregister', businessadmin.do_register);
 app.get('/businessview', businessview.do_work);
 
 app.get('/myinfo', myinfo.do_work);
+app.get('/invalidate', invalidatecoupon.do_work);
 
 app.get('/oldfliers', oldfliers.do_work);
 app.post('/updateflier', oldfliers.do_updateflier);
