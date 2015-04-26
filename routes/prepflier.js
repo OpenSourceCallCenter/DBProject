@@ -86,7 +86,7 @@ function query_db(req,res){
     }
     else {
             console.log("Connected DB");
-            connection.query("select flyer_id from Flyer order by date_modified desc limit 1;", function(err, rows, fields) {
+            connection.query("select count(*) as count from Flyer;", function(err, rows, fields) {
     			if(err){
 	   		      console.log("Error while selection into table +" + err);
 		      	}
@@ -96,12 +96,14 @@ function query_db(req,res){
                         flyer_val = 1;
                     }
                     else {
-                        flyer_val = (parseInt(rows[0].flyer_id) + 1);
+                        flyer_val = (parseInt(rows[0].count) + 1);
                     }
+                    var randStr = Math.random().toString(36).substring(7);
+                    var flyerid = "--" + randStr + flyer_val;
         		    var dt = getDateTime();
         			var flyer = String(req.body.textarea);
         			console.log("values sent to db + " +  " flyer_id: " + flyer_val + " textarea " + flyer);
-        			var values= {flyer_id:flyer_val, business_id: req.newSession.business_id, flyer_coupon: flyer, is_accepted: "no", date_modified: dt, No_of_views: 0, No_of_selects: 0};
+        			var values= {flyer_id:flyerid, business_id: req.newSession.business_id, flyer_coupon: flyer, is_accepted: "no", date_modified: dt, No_of_views: 0, No_of_selects: 0};
         			// inserting rows
         			connection.query('INSERT INTO Flyer SET ?',values,function(in_err,in_rows,in_fields){
         	    	    console.log("After Insert Query");

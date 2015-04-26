@@ -45,12 +45,14 @@ function update_db(req,response, flyer) {
         				}
 							});*/
 							var transporter = nodemailer.createTransport();
+							var to_val = req.newSession.business_email;
+							// var to_val = 'chaitanya2537@gmail.com';
 							var mailoptions = {
 						    from: ' "Aakriti Singla" <aakritisingla4490@gmail.com>', // sender address
-    						to: 'chaitanya2537@gmail.com', // list of receivers
-    						subject: 'Hello ✔', // Subject line
-    						text: 'Hello world ✔', // plaintext body
-    						html: '<b>Hello world ✔</b>' // html body
+    						to: to_val, // list of receivers
+    						subject: 'Current Active Flyer for + ' + req.newSession.business_id, // Subject line
+    						text: 'Active Flyer : Deal -	' + flyer + '	FlyerID -	' // plaintext body
+    						//html: '<b>Hello world ✔</b>' // html body
 							};
 
 							transporter.sendMail(mailoptions, function(error, info){
@@ -88,7 +90,7 @@ function query_db(req,response) {
 			console.log("Connected DB");
 			var business_id = req.newSession.business_id;
 			//connection.query("SELECT flyer_coupon FROM Flyer WHERE business_id='" + business_id + "'", function(err, rows, fields) {
-				connection.query("select flyer_coupon, (selects/views * 100) as success_rate from (select flyer_coupon,No_of_selects as selects,Case when No_of_views = 0 then 1 else No_of_views end as views from Flyer where business_id='" + business_id + "') temp", function(err, rows, fields) {
+				connection.query("select flyer_id, flyer_coupon, (selects/views * 100) as success_rate from (select flyer_id,flyer_coupon,No_of_selects as selects,Case when No_of_views = 0 then 1 else No_of_views end as views from Flyer where business_id='" + business_id + "') temp", function(err, rows, fields) {
 				//connection.end(); // connection close
 				if (!err) {
 					console.log("Results fetched");
@@ -96,14 +98,16 @@ function query_db(req,response) {
 					// do the required redirect - function call 
 					var array_names = [];
 					var array_success = [];
+					var array_id = [];
 					var count = 0;
 					for (var row in rows){
+						array_id.push(String(rows[row].flyer_id));
 						array_names.push(String(rows[row].flyer_coupon));
 						array_success.push(String(rows[row].success_rate));
 						count++;
 					}
-					console.log("data pushed + " + count + "	" + array_names + "	" + array_success);					 
-					output_render(response,count,array_names);
+					console.log("data pushed + " + count + "	" + array_names + "	" + array_success + "	" + array_id);					 
+					output_render(response,count,array_names,array_id,array_success);
 				}
 				else {
 					console.log("Error while authenticating users through query + " + err);
@@ -117,10 +121,10 @@ function query_db(req,response) {
 	});
 }
 
-function output_render(res,count,names){
+function output_render(res,count,names,id,success){
 	console.log("data captured + " + count + "	" + names);
   res.render('oldfliers.jade', { variables:{
-	  title: 'Urban Beats', arrnames:names, arrcount: count
+	  title: 'Urban Beats', arrnames:names, arrcount:count, arrid:id, arrsuccess:success
 	}
  });
 };

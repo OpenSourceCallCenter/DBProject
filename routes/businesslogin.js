@@ -58,6 +58,7 @@ function query_db(request,response,business_id) {
 								request.newSession.business_categories = rows[0].categories;
 								request.newSession.business_image = rows[0].business_image;
 								request.newSession.business_reviewcount = rows[0].review_count;
+								request.newSession.business_email = rows[0].email;
 								console.log("Session Values + " + request.newSession.business_name + "	" + request.newSession.business_address + "	" + request.newSession.business_city + "	" + request.newSession.business_state + "	" + request.newSession.business_stars + "	" + request.newSession.business_categories + "	" + request.newSession.business_reviewcount);
 								// do the required redirect - function call
 								output_businessview (response);
