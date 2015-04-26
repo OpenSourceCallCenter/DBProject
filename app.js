@@ -8,6 +8,7 @@ var stylus = require('stylus');
 var bodyParser = require('body-parser');
 var contacts = require('./routes/contacts');
 var nib = require('nib');
+var nodemailer = require('nodemailer');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -18,6 +19,7 @@ var useroptions = require('./routes/useroptions');
 var businessadmin = require('./routes/businessadmin');
 var businessview = require('./routes/businessview');
 var myinfo = require('./routes/myinfo');
+var invalidatecoupon = require('./routes/invalidate');
 var oldfliers = require('./routes/oldfliers');
 var prepflier = require('./routes/prepflier');
 
@@ -86,8 +88,10 @@ app.post('/businessregister', businessadmin.do_register);
 app.get('/businessview', businessview.do_work);
 
 app.get('/myinfo', myinfo.do_work);
+app.get('/invalidate', invalidatecoupon.do_work);
 
 app.get('/oldfliers', oldfliers.do_work);
+app.post('/updateflier', oldfliers.do_updateflier);
 
 app.get('/prepflier', prepflier.do_work);
 app.post('/addflier', prepflier.do_addflier);
