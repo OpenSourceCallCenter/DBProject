@@ -33,21 +33,39 @@ function query_db(request,response,business_id) {
 					console.log("Results fetched + " + rows[0].name);
 					if (rows.length > 0 ) {
 						console.log("Business Authenticated");
+						// get categories for the given business_id 
 
-						// setting session variables for business 
-						request.newSession.business_id = rows[0].business_id;
-						request.newSession.business_name = rows[0].name;
-						request.newSession.business_address = rows[0].full_address;
-						request.newSession.business_city = rows[0].city;
-						request.newSession.business_state = rows[0].state;
-						request.newSession.business_stars = rows[0].stars;
-						request.newSession.business_categories = String(rows[0].categories);
-						request.newSession.business_image = rows[0].business_image;
-						request.newSession.business_reviewcount = rows[0].review_count;
-						console.log("Session Values + " + request.newSession.business_name + "	" + request.newSession.business_address + "	" + request.newSession.business_city + "	" + request.newSession.business_state + "	" + request.newSession.business_stars + "	" + request.newSession.business_categories + "	" + request.newSession.business_reviewcount);
+						connection.query("select category_name from Categories C inner join Business_Categories BC on C.category_id = BC.category_id inner join Business B on BC.business_id = B.business_id where B.business_id='" + business_id + "'", function(err, in_rows, in_fields) {	
+						//connection.end(); // connection close
+							if (!err) {
+								console.log("Results fetched + ");
+								var array_categories = [];
+								var count = 0;
+								for (var row in in_rows){
+									array_categories.push(String(in_rows[row].category_name));
+									count++;
+								}	
 
-						// do the required redirect - function call
-						output_businessview (response);
+								console.log("Categories from joinned table + " + array_categories);
+								
+								// setting session variables for business 
+								request.newSession.business_id = rows[0].business_id;
+								request.newSession.business_name = rows[0].name;
+								request.newSession.business_address = rows[0].full_address;
+								request.newSession.business_city = rows[0].city;
+								request.newSession.business_state = rows[0].state;
+								request.newSession.business_stars = rows[0].stars;
+								request.newSession.business_categories = rows[0].categories;
+								request.newSession.business_image = rows[0].business_image;
+								request.newSession.business_reviewcount = rows[0].review_count;
+								console.log("Session Values + " + request.newSession.business_name + "	" + request.newSession.business_address + "	" + request.newSession.business_city + "	" + request.newSession.business_state + "	" + request.newSession.business_stars + "	" + request.newSession.business_categories + "	" + request.newSession.business_reviewcount);
+								// do the required redirect - function call
+								output_businessview (response);
+							}
+							else {
+								console.log("Error while fetching category through query + " + err);
+							}
+						});
 					} 
 					else {
 						// display error msg for unauthenticated user

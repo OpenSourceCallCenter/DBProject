@@ -8,8 +8,46 @@ var connection = {
 var newSession = require('client-sessions');
 
 exports.do_work = function(req, res){
-  res.render('prepflier.jade', { 
-	  title: 'Urban Beats' 
+    var connection_pool = mysql.createPool(connection);
+    connection_pool.getConnection(function(err, connection){
+    //connection.connect (function(err, connection) {
+        if(!err) {
+            console.log("Connected DB");
+            connection.query("SELECT * FROM Flyer WHERE is_accepted = 'yes' and business_id='" + req.newSession.business_id + "' limit 1", function(err, rows, fields) {
+                //connection.end(); // connection close
+                if (!err) {
+                    //console.log("Results fetched + " + rows[0].name);
+                    if (rows.length > 0 ) {
+                        console.log("Flyer Authenticated");
+                        // setting session variables for business 
+                        req.newSession.flyer = rows[0].flyer_coupon;
+                        console.log("Session Value + " + req.newSession.flyer);
+                        // do the required redirect - function call
+                        output_render (res, req.newSession.flyer);
+                    } 
+                    else {
+                        // display error msg for unauthenticated user
+                        console.log("Flyer Authentication Failed");
+                        req.newSession.flyer = "No flyer Selected";
+                        output_render (res, req.newSession.flyer);
+                        // display error msg // UI change
+                    }
+                }
+                else {
+                    console.log("Error while authenticating users through query + " + err);
+                }
+            });
+        }
+        else 
+            console.log("Disconnected DB + " + err);
+        connection.release();
+    });
+};
+
+function output_render(res,flyer_data){
+  res.render('prepflier.jade', { variables: {
+      title: 'Urban Beats', flyer: flyer_data
+  }
   });
 };
 
