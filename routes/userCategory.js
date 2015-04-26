@@ -233,11 +233,11 @@ function codeLatLng(lat, lng)
          
              console.log("inside category and city....");
 
-             dbQuery="SELECT TEMP.business_id,full_address,stars,review_count FROM";
+             dbQuery="SELECT name,TEMP.business_id,full_address,stars,review_count FROM";
 
              if(request.newSession.city)
               {
-                 dbQuery=dbQuery+" (SELECT business_id,full_address,stars,review_count FROM Business WHERE Business.city='Las Vegas') TEMP"
+                 dbQuery=dbQuery+" (SELECT name,business_id,full_address,stars,review_count FROM Business WHERE Business.city='Las Vegas') TEMP"
               }            
               if(request.newSession.category)
                {

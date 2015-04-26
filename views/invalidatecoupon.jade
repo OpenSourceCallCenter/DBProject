@@ -105,41 +105,18 @@ html
                   th Coupon ID
               |               
               tbody
-                tr
-                  td
-                    .checkbox
-                      label
-                        input.check(type='checkbox', name='finallevelusers[]')
-                  |                   
-                  td
-                    p Name1
-                  |                   
-                  td
-                    p coupon1
-                |                 
-                tr
-                  td
-                    .checkbox
-                      label
-                        input.check(type='checkbox', name='finallevelusers[]')
-                  |                   
-                  td
-                    p Name2
-                  |                   
-                  td
-                    p coupon2
-                |                 
-                tr
-                  td
-                    .checkbox
-                      label
-                        input.check(type='checkbox', name='finallevelusers[]')
-                  |                   
-                  td
-                    p Name3
-                  |                   
-                  td
-                    p coupon3
+                - each item, index in variables.results
+                  tr
+                    td
+                      .checkbox
+                        label
+                          input.check(type='checkbox', name='finallevelusers[]')
+                    |                   
+                    td
+                      p Name1
+                    |                   
+                    td
+                      p coupon1
             |             
             input(type='submit', value='Invalidate Coupon') 
     |     
