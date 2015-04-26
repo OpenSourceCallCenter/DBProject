@@ -28,9 +28,8 @@ head
       function ShowContent(d) {
       document.getElementById(d).style.display = "block";
       }
-      function ReverseDisplay(d) {
-      if(document.getElementById(d).style.display == "none") { document.getElementById(d).style.display = "block"; }
-      else { document.getElementById(d).style.display = "none"; }
+      function HideContent(d) {
+      document.getElementById(d).style.display = "none";
       }    
     style.
       .bs-example {
@@ -179,31 +178,24 @@ head
           th All You Want
       |       
       tbody
-        tr
-          td 
-            | #{variables.results[0].name}
-            br
-            | #{variables.results[0].full_address}
-            br
-            | #{variables.results[0].stars}
-            br
-            | #{variables.results[0].review_count}
-            br
-            p
-            #uniquename(style='display:none;')
-              iframe(src='pictures.html', width='400', height='250')
-            p
-              a(href="javascript:ReverseDisplay('uniquename')")
-                | View Pictures
-        |         
-        tr
-          td Garrett Winters
-        |         
-        tr
-          td Jonas Alexander
-        |         
-        tr
-          td Shad Decker
+        - each item, index in variables.results
+          tr
+            td
+              | #{variables.results[index].name}
+              br
+              | #{variables.results[index].full_address}
+              br
+              | #{variables.results[index].stars}
+              br
+              | #{variables.results[index].review_count}
+              br
+              p
+                a(href="javascript:ShowContent('uniquename')")
+                  | Show Pictures  
+                #uniquename(style='display:none;')
+                  iframe(src='pictures.html', width='400', height='250')
+                  a(href="javascript:HideContent('uniquename')")
+                    | Hidel Pictures
         .pos_fixed2
           input(type='submit', value='Notify All')
     .pos_fixed
@@ -225,14 +217,6 @@ head
             .navbar-collapse.collapse.sidebar-navbar-collapse
               ul.nav.navbar-nav
                 .container
-                  li Flyer1
-                  |                     
-                  br
-                  |                     
-                  li Flyer2
-                  |                     
-                  br
-                  |                     
-                  li Flyer3
-                  |                     
-                  br  
+                  - each item, index in variables.results
+                    li Flyer1
+                  
