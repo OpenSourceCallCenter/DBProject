@@ -2,7 +2,7 @@ doctype html(lang='en')
 head
     meta(charset='UTF-8')
     |     
-    title Example of Bootstrap 3 Pager
+    title Urban Beats
     |     
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css')
     |     
@@ -80,65 +80,99 @@ head
                     form(name='aForm', role='form')
                       .checkbox
                         label
-                          input(type='checkbox', onclick="window.location='http://www.google.com'; return true;")
+                          - var check = false
+                          - if (variables.rating === '4.0')
+                            - check = true
+                          input(type= 'checkbox', value='4.0', name='rating', checked = check, onclick="window.location='http://localhost:3000/refineRating?name=rating&value=4.0'; return true;")
                           | &ge; 4.0
                       |                     
                       .checkbox
                         label
-                          input(type='checkbox', onclick="window.location='http://www.google.com'; return true;")
+                          - var check = false
+                          - if (variables.rating === '3.0')
+                            - check= true  
+                          input(type='checkbox', value='3.0', name='rating', checked = check, onclick="window.location='http://localhost:3000/refineRating?name=rating&value=3.0'; return true;")
                           | &ge; 3.0
                     |                   
                     li Ambience
                     |                   
                     .checkbox
                       label
-                        input(type='checkbox', onclick="window.location='http://www.google.com'; return true;")
+                        - var check = false
+                        - if (variables.ambience === "casual")
+                            - check= true
+                        input(type='checkbox', checked=check, onclick="window.location='http://localhost:3000/refineAmbience?name=ambience&value=casual'; return true;")
                         | Casual
                     |                     
                     .checkbox
                       label
-                        input(type='checkbox', onclick="window.location='http://www.google.com'; return true;")
+                        - var check = false
+                        - if (variables.ambience === "romance")
+                            - check= true
+                        input(type='checkbox', checked=check, onclick="window.location='http://localhost:3000/refineAmbience?name=ambience&value=romance'; return true;")
                         | Romance
                     |                   
                     .checkbox
                       label
-                        input(type='checkbox', onclick="window.location='http://www.google.com'; return true;")
+                        - var check = false
+                        - if (variables.ambience === "classy")
+                            - check= true
+                        input(type='checkbox', checked=check, onclick="window.location='http://localhost:3000/refineAmbience?name=ambience&value=classy'; return true;")
                         | Classy
                     |                     
                     .checkbox
                       label
-                        input(type='checkbox', onclick="window.location='http://www.google.com'; return true;")
+                        - var check = false
+                        - if (variables.ambience === "trendy")
+                            - check= true
+                        input(type='checkbox', checked=check, onclick="window.location='http://localhost:3000/refineAmbience?name=ambience&value=trendy'; return true;")
                         | Trendy
                     li Takeout
                     |                   
                     .checkbox
                       label
-                        input(type='checkbox', onclick="window.location='http://www.google.com'; return true;")
+                        - var check = false
+                        - if (variables.takeout === "takeout")
+                            - check= true  
+                        input(type='checkbox', checked=check, onclick="window.location='http://localhost:3000/refineTakeout?name=takeout&value=takeout'; return true;")
                         | Yes
                     li Delivery
                     |                   
                     .checkbox
                       label
-                        input(type='checkbox', onclick="window.location='http://www.google.com'; return true;")
+                        - var check = false
+                        - if (variables.delivery === "delivery")
+                            - check= true    
+                        input(type='checkbox', checked=check, onclick="window.location='http://localhost:3000/refineDelivery?name=delivery&value=delivery'; return true;")
                         | Yes
                     li Alcohol
                     |                   
                     .checkbox
                       label
-                        input(type='checkbox', onclick="window.location='http://www.google.com'; return true;")
+                        - var check = false
+                        - if (variables.alcohol === "alcohol")
+                            - check= true 
+                        input(type='checkbox', checked=check, onclick="window.location='http://localhost:3000/refineAlcohol?name=alcohol&value=alcohol'; return true;")
                         | Yes
                     li Parking
                     |                   
                     .checkbox
                       label
-                        input(type='checkbox', onclick="window.location='http://www.google.com'; return true;")
+                        - var check = false
+                        - if (variables.parking === "parking")
+                            - check= true  
+                        input(type='checkbox', checked=check, onclick="window.location='http://localhost:3000/refineParking?name=parking&value=parking'; return true;")
                         | Yes
                     li Outdoor Seating
                     |                   
                     .checkbox
                       label
-                        input(type='checkbox', onclick="window.location='http://www.google.com'; return true;")
+                        - var check = false
+                        - if (variables.outdoorSeating === "outdoorSeating")
+                            - check= true   
+                        input(type='checkbox', checked=check, onclick="window.location='http://localhost:3000/refineOutdoorSeating?name=outdoorSeating&value=outdoorSeating'; return true;")
                         | Yes
+  form(action='')                        
     table#example.display(cellspacing='0', width='80%')
       thead
         tr
@@ -147,13 +181,13 @@ head
       tbody
         tr
           td 
-            | Company 1
+            | #{variables.results[0].name}
             br
-            | Address 1
+            | #{variables.results[0].full_address}
             br
-            | Ratings 1
+            | #{variables.results[0].stars}
             br
-            | Total Reviews 1
+            | #{variables.results[0].review_count}
             br
             p
             #uniquename(style='display:none;')
@@ -170,38 +204,8 @@ head
         |         
         tr
           td Shad Decker
-        | 
-        tr
-          td Shad Decker
-        | 
-        tr
-          td Shad Decker
-        | 
-        tr
-          td Shad Decker
-        | 
-        tr
-          td Shad Decker
-        | 
-        tr
-          td Shad Decker
-        | 
-        tr
-          td Shad Decker
-        | 
-        tr
-          td Shad Decker
-        | 
-        tr
-          td Shad Decker
-        |         
-        tr
-          td Michael Bruce
-        |         
-        tr
-          td Donna Snider
         .pos_fixed2
-          button.btn.btn-default.btn-lg(type='submit') Notify All
+          input(type='submit', value='Notify All')
     .pos_fixed
       .col-sm-3
         .sidebar-nav
@@ -232,4 +236,3 @@ head
                   li Flyer3
                   |                     
                   br  
-        

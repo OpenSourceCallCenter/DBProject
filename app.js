@@ -35,6 +35,7 @@ var myinfo = require('./routes/myinfo');
 var invalidatecoupon = require('./routes/invalidate');
 var oldfliers = require('./routes/oldfliers');
 var prepflier = require('./routes/prepflier');
+var userCategory = require('./routes/userCategory');
 
 var app = express();
 
@@ -138,6 +139,17 @@ app.get('/account', ensureAuthenticated, function(req, res){
 });
 
 app.get('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
+
+//to put initial filters on basis of location and category redirect to userCategory.js
+app.post('/usercategory', userCategory.do_work);
+// to refine the research on the basis of check_boxes
+app.get('/refineRating',userCategory.do_work_new);
+app.get('/refineAmbience',userCategory.do_work_new);
+app.get('/refineTakeout',userCategory.do_work_new);
+app.get('/refineDelivery',userCategory.do_work_new);
+app.get('/refineAlcohol',userCategory.do_work_new);
+app.get('/refineParking',userCategory.do_work_new);
+app.get('/refineOutdoorSeating',userCategory.do_work_new);
 
 
 app.get('/auth/facebook/callback',
