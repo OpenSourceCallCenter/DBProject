@@ -46,6 +46,10 @@ head
       top: 600px;
       right: 900px;
       }  
+      li {
+      font-size: 16px;
+      color: Maroon;
+      }
   body
     .container
       .row
@@ -53,7 +57,7 @@ head
           nav.navbar.navbar-default.topnav(role='navigation')
             .container.topnav
               .navbar-header
-                a.navbar-brand.topnav1(href='index.html')
+                a.navbar-brand.topnav1(href='/')
                   b Urban Beats
       |     
       .row
@@ -74,6 +78,9 @@ head
               |             
               .navbar-collapse.collapse.sidebar-navbar-collapse
                 ul.nav.navbar-nav
+                  table
+                    tr
+                      th Refine Your Taste
                   .container
                     li Rating
                     |                   
@@ -218,14 +225,13 @@ head
             .navbar-collapse.collapse.sidebar-navbar-collapse
               ul.nav.navbar-nav
                 .container
-                  li Flyer1
-                  |                     
-                  br
-                  |                     
-                  li Flyer2
-                  |                     
-                  br
-                  |                     
-                  li Flyer3
-                  |                     
-                  br  
+                  table
+                    tr
+                      th Premium Deals
+                  -each item1,index1 in variables.arrpbus
+                     li= item1
+                     |                     
+                     | 
+                     p=variables.arrpflyer[index1]
+                     | 
+                     br
