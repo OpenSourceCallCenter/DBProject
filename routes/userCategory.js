@@ -8,15 +8,130 @@ var geolocation=require('geolocation')
 */
 var city;
 var connection = {
-	host     : 'urbanbeats.czeuio4ikmlz.us-east-1.rds.amazonaws.com',
-	user     : 'urbanbeatsdb',
-	password : 'urbanbeatsdbpwd',
-	database : 'UrbanBeatsDB'
+  host     : 'urbanbeats.czeuio4ikmlz.us-east-1.rds.amazonaws.com',
+  user     : 'urbanbeatsdb',
+  password : 'urbanbeatsdbpwd',
+  database : 'UrbanBeatsDB'
 }
+
+exports.notifyBusiness = function(request,response)
+{
+  var flyerIds=[];
+  var flyerCoupons=[];
+
+   var connection_pool = mysql.createPool(connection);
+   
+    //console.log("length of filtered results...."+request.newSession.filteredResults[0].business_id);
+    var ids="(";
+    for(var i=0;i<request.newSession.filteredResults.length;i++)
+     {
+        
+        ids=ids+"'"+request.newSession.filteredResults[i].business_id+"',";
+            
+     }  
+
+     var finalStr=ids.substring(0,ids.length-1);
+     finalStr=finalStr+")";
+     console.log("id string..."+finalStr);
+
+    connection_pool.getConnection(function(err,connection)
+    {
+      
+       
+         console.log("[test int] +  " + i + " " + request.newSession.filteredResults.length);
+         console.log(parseInt(i,10) === parseInt(request.newSession.filteredResults.length,10))
+          var strQuery= "SELECT flyer_id,flyer_coupon FROM Flyer WHERE business_id IN "+finalStr+" and is_accepted='yes'";
+          console.log("query...."+strQuery);
+          connection.query(strQuery,function(err,rows,fields)
+            {
+                if(!err)
+             {
+              console.log("query got executed successfully....");
+              if(rows.length==0)
+               {
+                console.log("no records fetched from the database");
+               }  
+               else
+                {
+                    var flyerStr="(";
+                     console.log("flyer fetched");
+                     for(var i=0;i<rows.length;i++)
+                     {
+                       flyerStr=flyerStr+"'"+rows[i].flyer_id+"',";
+                       flyerIds.push(rows[i].flyer_id);
+                       flyerCoupons.push(rows[i].flyer_coupon);
+                     }  
+                     var finalFlyer=flyerStr.substring(0,flyerStr.length-1);
+                     finalFlyer=finalFlyer+")";
+                     console.log(finalFlyer);
+                     // update no_of_views of the flyer table
+                     var updateQuery = "UPDATE Flyer SET No_of_views=No_of_views+1 WHERE flyer_id IN "+finalFlyer
+                      console.log("update query..."+updateQuery);
+                     connection.query(updateQuery,function(err,row,fields)
+                     {
+                        if(!err)
+                         {
+                            console.log("value of no_of_views got updated successfully");
+                            // obtain the reviews of the corresponding business
+                            connection.query("SELECT text FROM Review WHERE business_id IN "+finalStr,function(err,review,fields)
+                              {
+                                  if(!err)
+                                   {
+                                     console.log("reviews fetched successfully..."+review[0].text);
+                                     redirect_notify(response,request.newSession.filteredResults,flyerIds,flyerCoupons,review);
+
+                                   } 
+                                   else
+                                   {
+                                     console.log("review selection failed...");
+                                   }
+
+                              });
+
+                           
+                         }  
+                         else
+                         {
+                          console.log("an error occurred while updating the no_of_views...");
+                         }  
+                     });
+                } 
+             }  
+             else
+             {
+              console.log("query didn't execute properly...");
+             }  
+              
+            });
+
+
+        
+            console.log("length of flyerCoupons..."+flyerCoupons.length);
+
+          
+       
+         
+        connection.release();
+       
+    }); 
+
+       
+}
+
+function redirect_notify(response,filteredResults,flyerIds,flyerCoupons,review)
+{
+   console.log("inside redirect notify function");
+   console.log("length of flyerCoupons inside redirect..."+flyerCoupons.length);
+   response.render('useroffers.jade', {variables: {
+     title: 'Urban Beats' , business: filteredResults, flyerIds: flyerIds, flyerCoupons: flyerCoupons, review: review}});
+
+         
+    
+};
 
 exports.do_work = function(request,response)
  {
- 	  console.log("Inside do_work page....category selected is..."+request.body.category);
+    console.log("Inside do_work page....category selected is..."+request.body.category);
     //console.log("before calling initialize function....");
     /*
     initialize();
@@ -200,9 +315,7 @@ function codeLatLng(lat, lng)
         //find country name
              for (var i=0; i<results[0].address_components.length; i++) {
             for (var b=0;b<results[0].address_components[i].types.length;b++) {
-
             //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
-
                 if (results[0].address_components[i].types[b] == "locality") 
                 {
                     //this is the object you are looking for
@@ -214,8 +327,6 @@ function codeLatLng(lat, lng)
         }
         //city data
        // alert("City is:   "+city.short_name)
-
-
         } else {
           //alert("No results found");
         }
@@ -235,8 +346,8 @@ function codeLatLng(lat, lng)
     var category;
     var dbQuery;
     
-  	var connection_pool = mysql.createPool(connection);
-	  connection_pool.getConnection(function(err, connection)
+    var connection_pool = mysql.createPool(connection);
+    connection_pool.getConnection(function(err, connection)
     {
        if(!err)
        {
@@ -285,7 +396,7 @@ function codeLatLng(lat, lng)
                {
                  dbQuery=dbQuery+" and Attributes.outdoor_seating=1";
                }
-
+                dbQuery=dbQuery+" LIMIT 5";
 
                //if(request.session.)
                console.log("final query string...."+dbQuery)
@@ -298,9 +409,9 @@ function codeLatLng(lat, lng)
                  // query got executed
                   if(business_rows_results.length == 0)
                     {
-                    	console.log("Records not fetched from the database....");
+                      console.log("Records not fetched from the database....");
                       // display error page 
-                    }	
+                    } 
                   else
                    {
                       connection.query("select name, flyer_coupon from ( select name, business_id from Business where is_premium = 'yes' ) TempBus inner join ( select flyer_coupon, business_id from Flyer where is_accepted = 'yes') TempFly on TempBus.business_id = TempFly.business_id order by RAND() limit 3;", function(err, rows, fields) {
@@ -357,7 +468,7 @@ function codeLatLng(lat, lng)
             console.log("Problem in connecting with the database....");   
          } 
 
-	 });
+   });
   
   };
 
@@ -366,6 +477,13 @@ function codeLatLng(lat, lng)
     console.log("Inside Redirect Output from User Category");
    //console.log("[debug]Inside redirect output function......" + req.newSession.hasRating);  
     //console.log("values being passed are.....rating "+req.newSession.hasRating+"\tambience: "+req.newSession.hasAmbience+"\t takeout: "+req.newSession.hasTakeout+"\t alcohol: "+req.newSession.hasAlcohol+"\t delivery: "+req.newSession.hasDelivery+"\t parking: "+req.newSession.hasParking+"\t seating: "+req.newSession.hasOutdoorSeating);
+     /*var business_ids=[]
+     for(var i=0;i<results.length;i++)
+     {
+        business_ids.push(String(results[i].business_id));
+     }
+     req.newSession.business_ids=business_ids;*/
+     req.newSession.filteredResults=results;
      res.render('useroptions.jade', {variables: {
      title: 'Urban Beats' , results: results, rating: req.newSession.hasRating, ambience: req.newSession.hasAmbience, takeout: req.newSession.hasTakeout, delivery: req.newSession.hasDelivery, alcohol: req.newSession.hasAlcohol, parking: req.newSession.hasParking, outdoorSeating: req.newSession.hasOutdoorSeating, arrpbus: pbusiness, arrpflyer: pflyer
    }

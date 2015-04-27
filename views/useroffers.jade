@@ -3,8 +3,36 @@ html
   head
     title Urban Beats
     |   
-    |   
+    link(href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/ui-darkness/jquery-ui.css', rel='stylesheet')
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+    script(src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js')
     script(type='text/javascript').
+      $(document).ready(function() {
+      $(function() {
+      $('#dialog').dialog({
+      autoOpen: false
+      });
+      $('#uniquename').on('click', function() {
+      if ($('#uniquename').prop('checked') == true)
+      $('#dialog').dialog('open');
+      });
+      });
+      // Validating Form Fields.....
+      $('#submit').click(function(e) {
+      var email = $('#email').val();
+      var name = $('#name').val();
+      var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+      if (email === '' || name === '') {
+      alert('Please fill all fields...!!!!!!');
+      e.preventDefault();
+      } else if (!(email).match(emailReg)) {
+      alert('Invalid Email...!!!!!!');
+      e.preventDefault();
+      } else {
+      alert('Form Submitted Successfully......');
+      }
+      });
+      });
       function disableHandler (form, inputName) {
       var inputs = form.elements[inputName];
       for (var i = 0; i < inputs.length; i++) {
@@ -94,16 +122,23 @@ html
                   | &#x9;&#x9;&#x9;
                   |             
                   th Flyers
+                  th Who
+                  th Where
               |         
               tbody
-                - each item in variables.arrnames
+                - each item,index in variables.flyerCoupons
                   tr
                     td
-                      .checkbox
-                        label
-                          input.check(type='checkbox', name='finallevelusers[]')
+                      #dialog(title='Reviews')
+                        form(action='', method='post')
+                          p something
+                      input#uniquename(type='checkbox', name='finallevelusers[]')
                     td
                       p= item
+                    td
+                      p(style='color:black;background-image: none;')= variables.business[index].name
+                    td
+                      p(style='color:black;background-image: none;')= variables.business[index].full_address 
             | &#x9;  
     | &#x9;
     |  
