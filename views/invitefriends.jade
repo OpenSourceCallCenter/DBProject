@@ -64,15 +64,13 @@ html
       // /.container
     |     
     .container
-      form(name='aForm', role='form')
-        .form-group
-          |           
-          h3 Enter the mail Id's
-          |           
-          input(type='text', name='', value='', size='40')
-          input(type='submit', value='Send Mail')
-          |  
-        form(action='')         
+      form(name='aForm', action='/invitefriends')
+        h3 Enter the mail Id's
+        |           
+        input(type='text', name='friend', value='', size='40')
+        input(type='submit', value='Send Mail')
+        |  
+      form(action='')         
           .table-responsive
             table.table
               thead
@@ -84,18 +82,7 @@ html
                 - each item, index in variables.results
                   tr
                     td
-                      .checkbox
-                        label
-                          input.check(type='checkbox', name='finallevelusers[]')
-                    |                   
-                    td
-                      p Name1
-                    |                   
-                    td
-                      p coupon1
-            |             
-            input(type='submit', value='Invalidate Coupon') 
-    |     
+                      p= item
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
     |     
     script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')

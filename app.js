@@ -17,6 +17,7 @@ var nib = require('nib');
 var nodemailer = require('nodemailer');
 var moment = require('moment');
 
+
 var connection = mysql.createConnection({
   host     : config.host,
   user     : config.username,
@@ -37,7 +38,7 @@ var invalidatecoupon = require('./routes/invalidate');
 var oldfliers = require('./routes/oldfliers');
 var prepflier = require('./routes/prepflier');
 var userCategory = require('./routes/userCategory');
-
+var invitefriends = require('./routes/invitefriends');
 var app = express();
 
 // Passport session setup.
@@ -168,6 +169,7 @@ app.get('/test', function(req, res){
 });
 
 app.get('/facebook', signin.do_facebooklogin);
+app.get('/invitefriends', invitefriends.do_work);
   
 // for sign-in registered business
 app.get('/businesslogin', businesslogin.do_work);
