@@ -5,11 +5,16 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>Urban Beats</title>
     <script src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="js/QueryData.js"></script>
+
+    
     <script type="text/javascript">
 
       google.load('search', '1');
 
       var imageSearch;
+      
+       
 
       function addPaginationLinks() {
       
@@ -83,9 +88,14 @@
         // Set searchComplete as the callback function when a search is 
         // complete.  The imageSearch object will have results in it.
         imageSearch.setSearchCompleteCallback(this, searchComplete, null);
+        
+        // extract the GET data
+		var getData = new QueryData();
+		console.log(getData);
 
         // Find me a beautiful car.
-        imageSearch.execute("Harvest Bar and Grill Philadelphia");
+        imageSearch.execute(getData.name);
+       
         
         // Include the required Google branding
         google.search.Search.getBranding('branding');

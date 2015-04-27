@@ -201,7 +201,7 @@ head
                 a(href="javascript:ShowContent('#{unq}')" )
                   | Show Pictures  
                 div(id=unq, style='display:none;')
-                  iframe(src='pictures.jade', width='400', height='250')
+                  iframe(src='pictures.html?name=#{variables.results[index].name}', width='400', height='250')
                   a(href="javascript:HideContent('#{unq}')")
                     | Hide Pictures
         .pos_fixed2
