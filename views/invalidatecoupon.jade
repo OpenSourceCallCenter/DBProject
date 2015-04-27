@@ -64,7 +64,7 @@ html
       // /.container
     |     
     .container
-      form(name='aForm', role='form')
+      form(role='form')
         .form-group
           br
           br
@@ -86,13 +86,14 @@ html
             | &#x9;&#x9;
             li.active
               a(href='/invalidate') Invalidate Coupon
-          |           
+          | 
+        form(name='iForm', action = '/invalidate')
           h3 Enter the Flyer ID
           |           
-          input(type='text', name='', value='', size='40')
+          input(type='text', name='flyerid', value='#{variables.flyerid}', size='40')
           input(type='submit', value='Get Coupons')
           |  
-        form(action='')         
+        form(action = '/invalidatecoupon', method = 'post')         
           .table-responsive
             table.table
               thead
@@ -105,18 +106,18 @@ html
                   th Coupon ID
               |               
               tbody
-                - each item, index in variables.results
+                - each item, index in variables.arrcoupon
                   tr
                     td
                       .checkbox
                         label
-                          input.check(type='checkbox', name='finallevelusers[]')
+                          input.check(type='checkbox', name='finallevelusers[]', value='#{variables.arrcoupon[index]}')
                     |                   
                     td
-                      p Name1
+                      p= variables.arruser[index]
                     |                   
                     td
-                      p coupon1
+                      p= item
             |             
             input(type='submit', value='Invalidate Coupon') 
     |     

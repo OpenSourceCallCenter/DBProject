@@ -113,6 +113,9 @@ function query_db(req,res){
         	       		}
         			    else{
     					   console.log("data successfully inserted into the database");
+                           // return;
+                           // res.end();
+                           res.redirect('/oldfliers');
           				   // functionality of display confirmation to business
         			    }
 			}); // end connection.execute

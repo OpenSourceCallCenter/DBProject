@@ -181,6 +181,7 @@ app.get('/businessview', businessview.do_work);
 
 app.get('/myinfo', myinfo.do_work);
 app.get('/invalidate', invalidatecoupon.do_work);
+app.post('/invalidatecoupon', invalidatecoupon.do_invalidate);
 
 app.get('/oldfliers', oldfliers.do_work);
 app.post('/updateflier', oldfliers.do_updateflier);
