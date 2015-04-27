@@ -28,8 +28,9 @@ head
       function ShowContent(d) {
       document.getElementById(d).style.display = "block";
       }
-      function HideContent(d) {
-      document.getElementById(d).style.display = "none";
+      function ReverseDisplay(d) {
+      if(document.getElementById(d).style.display == "none") { document.getElementById(d).style.display = "block"; }
+      else { document.getElementById(d).style.display = "none"; }
       }    
     style.
       .bs-example {
@@ -45,6 +46,10 @@ head
       top: 600px;
       right: 900px;
       }  
+      li {
+      font-size: 16px;
+      color: Maroon;
+      }
   body
     .container
       .row
@@ -52,7 +57,7 @@ head
           nav.navbar.navbar-default.topnav(role='navigation')
             .container.topnav
               .navbar-header
-                a.navbar-brand.topnav1(href='index.html')
+                a.navbar-brand.topnav1(href='/')
                   b Urban Beats
       |     
       .row
@@ -73,6 +78,9 @@ head
               |             
               .navbar-collapse.collapse.sidebar-navbar-collapse
                 ul.nav.navbar-nav
+                  table
+                    tr
+                      th Refine Your Taste
                   .container
                     li Rating
                     |                   
@@ -171,7 +179,7 @@ head
                             - check= true   
                         input(type='checkbox', checked=check, onclick="window.location='http://localhost:3000/refineOutdoorSeating?name=outdoorSeating&value=outdoorSeating'; return true;")
                         | Yes
-  form(action='')                        
+  form(name='notifyForm', action='/notify', method='post')                        
     table#example.display(cellspacing='0', width='80%')
       thead
         tr
@@ -195,7 +203,7 @@ head
                 #uniquename(style='display:none;')
                   iframe(src='pictures.html', width='400', height='250')
                   a(href="javascript:HideContent('uniquename')")
-                    | Hidel Pictures
+                    | Hide Pictures
         .pos_fixed2
           input(type='submit', value='Notify All')
     .pos_fixed
@@ -217,8 +225,13 @@ head
             .navbar-collapse.collapse.sidebar-navbar-collapse
               ul.nav.navbar-nav
                 .container
-                  - each item, index in variables.results
-                    li Flyer1
-                    |
-                    li {whatever u want here}
-                  
+                  table
+                    tr
+                      th Premium Deals
+                  -each item1,index1 in variables.arrpbus
+                     li= item1
+                     |                     
+                     | 
+                     p=variables.arrpflyer[index1]
+                     | 
+                     br

@@ -286,12 +286,39 @@ function codeLatLng(lat, lng)
                   if(business_rows_results.length == 0)
                     {
                     	console.log("Records not fetched from the database....");
+                      // display error page 
                     }	
                   else
                    {
-                 
+                      connection.query("select name, flyer_coupon from ( select name, business_id from Business where is_premium = 'yes' ) TempBus inner join ( select flyer_coupon, business_id from Flyer where is_accepted = 'yes') TempFly on TempBus.business_id = TempFly.business_id order by RAND() limit 3;", function(err, rows, fields) {
+                        if (!err) {
+                          if (rows.length > 0 ) {
+                            console.log("Premium Flyer Authenticated");
+                            var arr_pbus = [];
+                            var arr_pflyer = [];
+                            var count = 0;
+                            for (var row in rows){
+                              arr_pbus.push(String(rows[row].name));
+                              arr_pflyer.push(String(rows[row].flyer_coupon));
+                              count++;
+                            }
+                            // do the required redirect - function call
+                            redirect_output(request,response,business_rows_results,arr_pbus,arr_pflyer);
+                          } 
+                          else {
+                            // display error msg for unauthenticated user
+                            console.log("Premium Flyer Authentication Failed");
+                            var arr_pbus = [];
+                            var arr_pflyer = [];
+                            redirect_output(request,response,business_rows_results,arr_pbus,arr_pflyer);
+                          }
+                        }
+                        else {
+                          console.log("Error while authenticating users through query + " + err);
+                        }
+                      });
                        console.log("records fetched from the database...."); 
-                       redirect_output(request,response,business_rows_results);
+                       
                       //request.newSession.city=city_here
                       //request.newSession.category=category
                       
@@ -311,9 +338,6 @@ function codeLatLng(lat, lng)
                   console.log("No result fetched");
                 }*/
             });
-          
-         
-
         }
         else
          {
@@ -324,13 +348,13 @@ function codeLatLng(lat, lng)
   
   };
 
-  function redirect_output(req,res,results)
+  function redirect_output(req,res,results,pbusiness,pflyer)
   {
-   console.log("[debug]Inside redirect output function......" + req.newSession.hasRating);  
-
-    console.log("values being passed are.....rating "+req.newSession.hasRating+"\tambience: "+req.newSession.hasAmbience+"\t takeout: "+req.newSession.hasTakeout+"\t alcohol: "+req.newSession.hasAlcohol+"\t delivery: "+req.newSession.hasDelivery+"\t parking: "+req.newSession.hasParking+"\t seating: "+req.newSession.hasOutdoorSeating);
+    console.log("Inside Redirect Output from User Category");
+   //console.log("[debug]Inside redirect output function......" + req.newSession.hasRating);  
+    //console.log("values being passed are.....rating "+req.newSession.hasRating+"\tambience: "+req.newSession.hasAmbience+"\t takeout: "+req.newSession.hasTakeout+"\t alcohol: "+req.newSession.hasAlcohol+"\t delivery: "+req.newSession.hasDelivery+"\t parking: "+req.newSession.hasParking+"\t seating: "+req.newSession.hasOutdoorSeating);
      res.render('useroptions.jade', {variables: {
-     title: 'Urban Beats' , results: results, rating: req.newSession.hasRating, ambience: req.newSession.hasAmbience, takeout: req.newSession.hasTakeout, delivery: req.newSession.hasDelivery, alcohol: req.newSession.hasAlcohol, parking: req.newSession.hasParking, outdoorSeating: req.newSession.hasOutdoorSeating
+     title: 'Urban Beats' , results: results, rating: req.newSession.hasRating, ambience: req.newSession.hasAmbience, takeout: req.newSession.hasTakeout, delivery: req.newSession.hasDelivery, alcohol: req.newSession.hasAlcohol, parking: req.newSession.hasParking, outdoorSeating: req.newSession.hasOutdoorSeating, arrpbus: pbusiness, arrpflyer: pflyer
    }
   });
 
