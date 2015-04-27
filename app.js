@@ -51,8 +51,10 @@ passport.deserializeUser(function(obj, done) {
 
 
 passport.use(new FacebookStrategy({
-    clientID: '957496190961738',
-    clientSecret:'329cba0e2b6eb60c49fec2a31699c96e' ,
+    //clientID: '957496190961738',
+    //clientSecret:'329cba0e2b6eb60c49fec2a31699c96e' ,
+    clientID: '826675407413047',
+    clientSecret: '97bd866b5ff1c2e1ca7391eb30718bca',
     callbackURL: 'http://localhost:3000/auth/facebook/callback'
   },
   function(accessToken, refreshToken, profile, done) {
@@ -162,7 +164,10 @@ app.get('/auth/facebook/callback',
 app.get('/test', function(req, res){
 	console.log(req.user);
   //res.render('/index', { user: req.user });
+  res.redirect('/facebook?user=' + req.user.displayName + '&email=' + req.user.emails[0].value);
 });
+
+app.get('/facebook', signin.do_facebooklogin);
   
 // for sign-in registered business
 app.get('/businesslogin', businesslogin.do_work);

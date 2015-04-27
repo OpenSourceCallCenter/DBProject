@@ -22,6 +22,59 @@ exports.do_authenticate = function(request, response){
 	query_db(request,response,request.body.fname,request.body.pwd);
 };
 
+exports.do_facebooklogin = function(request, response){
+  console.log("[facebook] " + request.query.user + "  " + request.query.email);
+  query_fb(request,response,request.query.user,request.query.email);
+};
+
+function query_fb(req,res,user,email){
+  var connection_pool = mysql.createPool(connection);
+  connection_pool.getConnection(function(err, connection){
+  //connection.connect(function(err, connection){
+    /*
+    var now = new Date();
+    var jsonDate = now.toJSON();
+    var member_since = new Date(jsonDate);
+    */
+    if ( err ){
+      console.log("Error connecting to db + " + err);
+    }
+    console.log("Connected DB");
+    connection.query("SELECT * FROM User WHERE user_id='" + email + "'", function(err, rows, fields) {
+      if(err){
+        console.log("Error while selection into table +" + err);
+      }
+      else{
+        if(rows.length == 0) {
+          var values={first_name:user, last_name:"", user_id:email, password:"facebook", review_count:0, member_since:"2015-04", Sec_Ques1:"", Sec_Ans1:"", Sec_Ques2:"", Sec_Ans2:"", Sec_Ques3:"", Sec_Ans3:""};
+          // inserting rows
+          connection.query('INSERT INTO User SET ?',values,function(in_err,in_rows,in_fields){
+          console.log("After Insert Query");
+            //connection.end(); // done with the connection
+            if ( in_err ){
+              console.log("Error while inserting into table +" + in_err);
+            }
+            else{
+              console.log("data successfully inserted into the database");
+              //output_signup(res);
+              req.newSession.user_id=email;
+              output_filter(req,res);
+            }
+          }); // end connection.execute
+        }
+        else {
+          // display error msg saying user exists
+          console.log("User already exists"); 
+          req.newSession.user_id=email;
+          output_filter(req,res);
+
+        }
+      }
+    });
+    connection.release();
+  }); // end sql.connect
+}
+
 function query_db(request,response,fname,pwd) {
 	var connection_pool = mysql.createPool(connection);
 	connection_pool.getConnection(function(err, connection){
