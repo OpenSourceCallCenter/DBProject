@@ -189,20 +189,20 @@ head
         - each item, index in variables.results
           tr
             td
-              | #{variables.results[index].name}
+              | Business Name: #{variables.results[index].name}
               br
-              | #{variables.results[index].full_address}
+              | Address: #{variables.results[index].full_address}
               br
-              | #{variables.results[index].stars}
+              | Rating: #{variables.results[index].stars}/5
               br
-              | #{variables.results[index].review_count}
-              br
+              | 
               p
-                a(href="javascript:ShowContent('uniquename')")
+                - var unq = 'uniquename'+index
+                a(href="javascript:ShowContent('#{unq}')" )
                   | Show Pictures  
-                #uniquename(style='display:none;')
-                  iframe(src='pictures.html', width='400', height='250')
-                  a(href="javascript:HideContent('uniquename')")
+                div(id=unq, style='display:none;')
+                  iframe(src='pictures.jade', width='400', height='250')
+                  a(href="javascript:HideContent('#{unq}')")
                     | Hide Pictures
         .pos_fixed2
           input(type='submit', value='Notify All')
