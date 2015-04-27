@@ -1,5 +1,6 @@
 var mysql      = require('mysql');
 var newSession = require('client-sessions');
+var moment = require('moment');
 /*
 var geocoder = require('geocoder');
 var navigator= require('navigator');
@@ -33,6 +34,18 @@ exports.do_work = function(request,response)
         geo.getCurrentPosition(successFunction, errorFunction);
     } 
     */
+
+    // testing Day and time for Business_Hours 
+    var day = moment().format('dddd');
+    var time = String(moment().format('HH:mm'));
+    //var open = moment("17:00", "HH:mm");
+    //var close = moment("23:00", "HH:mm");
+    var open = "17:00";
+    var close = "23:00";
+    console.log("[compare]");
+    console.log((open <= time) && (close >= time))
+    console.log("[day-time] Day + " + day + " Time +  " + time);
+
     request.newSession.category = true;
     request.newSession.hasCategory = request.body.category;
     request.newSession.city = true;
