@@ -83,6 +83,7 @@ var logout= require('./routes/logout');
 var forgotPassword= require('./routes/forgotPassword');
 var availOffer= require('./routes/availoffer');
 var inviteFriends= require('./routes/inviteFriends');
+var addNewFriends= require('./routes/addNewFriends');
 
 
 passport.use(new FacebookStrategy({
@@ -195,7 +196,7 @@ app.get('/forgotPassword',forgotPassword.do_work_render);
 app.post('/securityQues',forgotPassword.do_work);
 app.post('/emailPassword',forgotPassword.sendEmail);
 app.post('/availOffer',availOffer.do_work);
-app.get('/inviteFriends',inviteFriends.do_work);
+app.get('/inviteFriends',addNewFriends.do_work);
 app.post('/sendSMS',inviteFriends.sendSMS);
 
 
