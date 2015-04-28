@@ -27,7 +27,8 @@ exports.do_work = function(req, res){
 	    		console.log("Error connecting to db + " + err);
 	    }
 	    console.log("Connected DB");
-	    connection.query("SELECT friend_id FROM Friends WHERE login_id='" + req.newSession.user_id + "'", function(err, rows, fields) {
+	    //select friend_id from Friends inner join User on User.user_id = Friends.friend_id where login_id = 'kaushik_surya333@yahoo.com' and is_loggedIn = 1
+	    connection.query("select friend_id from Friends inner join User on User.user_id = Friends.friend_id where login_id ='" + req.newSession.user_id + "' and is_loggedIn = 1", function(err, rows, fields) {
 				if(err){
 					console.log("Error while selection into table +" + err);
 				}
