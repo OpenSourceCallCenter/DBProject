@@ -49,6 +49,36 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
+//request.newSession.user_id
+var authenticate = function (req, res, next) {
+  var isAuthenticated = true;
+  console.log(req.newSession.user_id);
+  if (req.newSession.user_id == undefined) {
+    isAuthenticated = false;
+  }
+  if (isAuthenticated) {
+    next();
+  }
+  else {
+    res.redirect('/');
+  }
+}
+
+//request.newSession.business_id
+var authenticatebusiness = function (req, res, next) {
+  var isAuthenticated = true;
+  console.log(req.newSession.business_id);
+  if (req.newSession.business_id == undefined) {
+    isAuthenticated = false;
+  }
+  if (isAuthenticated) {
+    next();
+  }
+  else {
+    res.redirect('/');
+  }
+}
+
 
 passport.use(new FacebookStrategy({
     //clientID: '957496190961738',
@@ -146,13 +176,13 @@ app.get('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
 //to put initial filters on basis of location and category redirect to userCategory.js
 app.post('/usercategory', userCategory.do_work);
 // to refine the research on the basis of check_boxes
-app.get('/refineRating',userCategory.do_work_new);
-app.get('/refineAmbience',userCategory.do_work_new);
-app.get('/refineTakeout',userCategory.do_work_new);
-app.get('/refineDelivery',userCategory.do_work_new);
-app.get('/refineAlcohol',userCategory.do_work_new);
-app.get('/refineParking',userCategory.do_work_new);
-app.get('/refineOutdoorSeating',userCategory.do_work_new);
+app.get('/refineRating', authenticate, userCategory.do_work_new);
+app.get('/refineAmbience',authenticate,userCategory.do_work_new);
+app.get('/refineTakeout',authenticate,userCategory.do_work_new);
+app.get('/refineDelivery',authenticate,userCategory.do_work_new);
+app.get('/refineAlcohol',authenticate,userCategory.do_work_new);
+app.get('/refineParking',authenticate,userCategory.do_work_new);
+app.get('/refineOutdoorSeating',authenticate,userCategory.do_work_new);
 
 
 app.get('/auth/facebook/callback',
@@ -168,7 +198,7 @@ app.get('/test', function(req, res){
 });
 
 app.get('/facebook', signin.do_facebooklogin);
-app.get('/invitefriends', invitefriends.do_work);
+app.get('/invitefriends', authenticate,invitefriends.do_work);
   
 // for sign-in registered business
 app.get('/businesslogin', businesslogin.do_work);
@@ -183,19 +213,19 @@ app.get('/contacts', contacts.do_work);
 app.get('/businessadmin', businessadmin.do_work);
 app.post('/businessregister', businessadmin.do_register);
 
-app.get('/businessview', businessview.do_work);
+app.get('/businessview',authenticatebusiness, businessview.do_work);
 
-app.get('/myinfo', myinfo.do_work);
-app.get('/invalidate', invalidatecoupon.do_work);
+app.get('/myinfo',authenticatebusiness, myinfo.do_work);
+app.get('/invalidate',authenticatebusiness, invalidatecoupon.do_work);
 app.post('/invalidatecoupon', invalidatecoupon.do_invalidate);
 
-app.get('/oldfliers', oldfliers.do_work);
+app.get('/oldfliers',authenticatebusiness, oldfliers.do_work);
 app.post('/updateflier', oldfliers.do_updateflier);
 
-app.get('/prepflier', prepflier.do_work);
+app.get('/prepflier',authenticatebusiness, prepflier.do_work);
 app.post('/addflier', prepflier.do_addflier);
 
-app.post('/notify',userCategory.notifyBusiness);
+app.post('/notify',userCategory.notifyBusiness);  
 
 
 // catch 404 and forward to error handler
