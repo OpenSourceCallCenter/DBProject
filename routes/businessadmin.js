@@ -74,7 +74,7 @@ function query_db(req,res){
                     var businessid = "--" + randStr + business_val;
         			var member_since = getDateTime();
     			    var categories = String(req.body.category).replace(',',';');
-    			    console.log("values sent to db + " +  " business_id: " + businessId + " name: " + req.body.bname +  " full_address: " + req.body.baddr + " city: " + req.body.city + " state: " + req.body.state + " categories: " + categories + " email: " + req.body.email +  " Date: " + member_since);
+    			    //console.log("values sent to db + " +  " business_id: " + businessId + " name: " + req.body.bname +  " full_address: " + req.body.baddr + " city: " + req.body.city + " state: " + req.body.state + " categories: " + categories + " email: " + req.body.email +  " Date: " + member_since);
     			    var values= {business_id:businessid, name:req.body.bname, full_address:req.body.baddr, city:req.body.city, state:req.body.state, stars:0.0, review_count:0, categories:categories, open:1, email:req.body.email, Date:member_since};
     			    // inserting rows
     			    connection.query('INSERT INTO Business SET ?',values,function(in_err,in_rows,in_fields){
