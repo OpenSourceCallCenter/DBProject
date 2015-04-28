@@ -188,7 +188,7 @@ exports.do_work = function(request,response)
  exports.do_work_new = function(request,response)
   {
      console.log("inside do_work_new");
-     console.log("Category is...."+request.newSession.hasCategory);
+     
      console.log("Request Body here...."+request.query);
      var checkBoxArray=request.query;
      var arr = Object.keys(checkBoxArray).map(function(key)
@@ -368,16 +368,14 @@ function codeLatLng(lat, lng)
 
              dbQuery="SELECT name,TEMP.business_id,full_address,stars,review_count FROM";
 
-             //if(request.newSession.city)
-              //{
-            	 console.log("Inside city");
+             if(request.newSession.city)
+              {
                  dbQuery=dbQuery+" (SELECT name,business_id,full_address,stars,review_count FROM Business WHERE Business.city='Las Vegas') TEMP"
-              //}            
-              //if(request.newSession.category)
-               //{
-            	  console.log("Inside category");
+              }            
+              if(request.newSession.category)
+               {
                 dbQuery=dbQuery+" INNER JOIN (SELECT business_id FROM Business_Hours WHERE day='"+day+"' and open<= '"+time+"' and close>= '"+time+"')TEMPHOURS ON TEMP.business_id=TEMPHOURS.business_id INNER JOIN Business_Categories ON TEMP.business_id=Business_Categories.business_id INNER JOIN Categories ON Business_Categories.category_id=Categories.category_id INNER JOIN Attributes ON TEMP.business_id=Attributes.business_id WHERE Categories.category_name='"+request.newSession.hasCategory+"'"
-               //} 
+               } 
                if(request.newSession.rating)
                {
                  dbQuery=dbQuery+" and stars>="+request.newSession.hasRating
@@ -407,7 +405,7 @@ function codeLatLng(lat, lng)
                {
                  dbQuery=dbQuery+" and Attributes.outdoor_seating=1";
                }
-                //dbQuery=dbQuery+" LIMIT 5";
+                dbQuery=dbQuery+" LIMIT 5";
 
                //if(request.session.)
                console.log("final query string...."+dbQuery)
@@ -425,11 +423,6 @@ function codeLatLng(lat, lng)
                     } 
                   else
                    {
-                	  for(var i=0;i<business_rows_results.length;i++)
-                		 {
-                		  
-                		       console.log("Business_id......"+business_rows_results[i].business_id);
-                		 } 
                       connection.query("select name, flyer_coupon from ( select name, business_id from Business where is_premium = 'yes' ) TempBus inner join ( select flyer_coupon, business_id from Flyer where is_accepted = 'yes') TempFly on TempBus.business_id = TempFly.business_id order by RAND() limit 3;", function(err, rows, fields) {
                         if (!err) {
                           if (rows.length > 0 ) {
