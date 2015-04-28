@@ -6,6 +6,13 @@ var connection = {
 	password : 'urbanbeatsdbpwd',
 	database : 'UrbanBeatsDB'
 }
+var redis = require('redis');
+var client = redis.createClient(10488,"pub-redis-10488.us-east-1-3.3.ec2.garantiadata.com",{no_ready_check: true});
+if ("urbanbeats") {
+  client.auth("urbanbeats", function() {
+    console.log('Redis client connected');
+  });
+}
 
 /*
  * GET home page, which is specified in Jade.

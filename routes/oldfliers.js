@@ -45,8 +45,8 @@ function update_db(req,response, flyer) {
         				}
 							});*/
 							var transporter = nodemailer.createTransport();
-							var to_val = req.newSession.business_email;
-							// var to_val = 'chaitanya2537@gmail.com';
+							// var to_val = req.newSession.business_email;
+							var to_val = 'chaitanya2537@gmail.com';
 							var mailoptions = {
 						    from: ' "Aakriti Singla" <aakritisingla4490@gmail.com>', // sender address
     						to: to_val, // list of receivers
