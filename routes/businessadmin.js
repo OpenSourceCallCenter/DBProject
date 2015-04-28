@@ -53,11 +53,20 @@ function query_db(req,res){
     console.log("Connected DB");
     connection.query("select count(*) as count from Business order by Date desc limit 1;", function(err, rows, fields) {
 			if(err){
+                var msg = "Error while selection into table +" + err;
 				console.log("Error while selection into table +" + err);
+                res.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
 			}
 			else{
 				if(rows.length == 0) {
 				    // display error message to tell unique business id not fetched 
+                    res.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: "Business Id not generated"
+                                }
+                            });
 				}
 				else {
 					var business_val = (parseInt(rows[0].count) + 1);
@@ -72,10 +81,16 @@ function query_db(req,res){
     				console.log("After Insert Query");
     				//connection.end(); // done with the connection
     				if ( in_err ){
+                            var msg = "Error while inserting into table +" + in_err;
 							console.log("Error while inserting into table +" + in_err);
+                            res.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
     				}
     				else{
 							console.log("data successfully inserted into the database");
+                            res.redirect('/businessadmin');
       				// functionality of send email confirmation to the business 
     				}
 				}); // end connection.execute

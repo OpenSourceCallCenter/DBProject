@@ -17,7 +17,6 @@ var nib = require('nib');
 var nodemailer = require('nodemailer');
 var moment = require('moment');
 
-
 var connection = mysql.createConnection({
   host     : config.host,
   user     : config.username,

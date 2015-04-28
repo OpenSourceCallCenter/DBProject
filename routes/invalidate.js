@@ -35,7 +35,12 @@ function update_db(request,response,coupon_id) {
 					output_render (response,flyer_id,coupon_details,user_details);
 				}
 				else {
+					var msg = "Error while authenticating users through query + " + err;
 					console.log("Error while authenticating users through query + " + err);
+										response.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
 				}
 			});
 		}

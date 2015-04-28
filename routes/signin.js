@@ -52,7 +52,12 @@ function query_fb(req,res,user,email){
           console.log("After Insert Query");
             //connection.end(); // done with the connection
             if ( in_err ){
+              var msg= "Error while inserting into table +" + in_err;
               console.log("Error while inserting into table +" + in_err);
+              response.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
             }
             else{
               console.log("data successfully inserted into the database");
@@ -84,7 +89,7 @@ function query_db(request,response,fname,pwd) {
 			connection.query("SELECT * FROM User WHERE user_id='" + fname + "' AND password='" + pwd + "'", function(err, rows, fields) {
 				//connection.end(); // connection close
 				if (!err) {
-					console.log("Results fetched + " + rows[0].first_name);
+					//console.log("Results fetched + " + rows[0].first_name);
 					if (rows.length > 0 ) {
 						console.log("User Authenticated");
 						// do the required redirect - function call 
@@ -94,17 +99,35 @@ function query_db(request,response,fname,pwd) {
 					} 
 					else {
 						// display error msg for unauthenticated user
+            var msg = "User Authentication Failed";
 						console.log("User Authentication Failed");
+            response.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
 						// display error msg // UI change
 					}
 				}
 				else {
+          var msg  = "Error while authenticating users through query + " + err;
 					console.log("Error while authenticating users through query + " + err);
+                      response.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
+
 				}
 			});
 		}
-		else 
+		else {
+      var msg = "Disconnected DB + " + err;
 			console.log("Disconnected DB + " + err);
+                  response.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
+
+    }
 		connection.release();
 	});
 }
@@ -159,7 +182,13 @@ function output_filter(req,res)
                  else
                   {
                   	// display the error message
+                    var msg = "Failed to fetch the user name corresponding to the user_id..."+err;
                   	console.log("Failed to fetch the user name corresponding to the user_id..."+err);
+                                     response.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
+
                      
                   }	
                  connection.release();

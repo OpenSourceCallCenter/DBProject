@@ -66,17 +66,35 @@ function update_db(req,response, flyer) {
 
 						}
 						else {
+							var msg = "Error while updating 1 in flyer + " + err;
 							console.log("Error while updating 1 in flyer + " + err);
+							response.render('errordisplay.jade', { variables:{
+          title: 'Urban Beats', error: msg
+		                                }
+                            });
+
 						}
 					});
 				}
 				else {
+					var msg = "Error while updating 0 in flyer + " + err;
 					console.log("Error while updating 0 in flyer + " + err);
+					console.log("Error while updating 1 in flyer + " + err);
+							response.render('errordisplay.jade', { variables:{
+          title: 'Urban Beats', error: msg
+		                                }
+                            });
 				}
 			});
 		}
 		else {
+			var msg = "Disconnected DB + " + err;
 			console.log("Disconnected DB + " + err);
+					response.render('errordisplay.jade', { variables:{
+          title: 'Urban Beats', error: msg
+		                                }
+                            });
+
 		}
 		connection.release();
 	});

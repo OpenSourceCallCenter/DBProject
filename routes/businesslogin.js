@@ -64,14 +64,24 @@ function query_db(request,response,business_id) {
 								output_businessview (response);
 							}
 							else {
+								var msg = "Error while fetching category through query + " + err;
 								console.log("Error while fetching category through query + " + err);
+								response.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
 							}
 						});
 					} 
 					else {
 						// display error msg for unauthenticated user
+						var msg = "Business Authentication Failed";
 						console.log("Business Authentication Failed");
 						// display error msg // UI change
+						response.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
 					}
 				}
 				else {
@@ -79,8 +89,14 @@ function query_db(request,response,business_id) {
 				}
 			});
 		}
-		else 
+		else {
+			var msg = "Disconnected DB + " + err;
 			console.log("Disconnected DB + " + err);
+			response.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
+		}
 		connection.release();
 	});
 }
@@ -116,6 +132,10 @@ function query_users(response) {
 						// display error msg for unauthenticated user
 						console.log("No Logged in Users");
 						// display error msg // UI change
+												var array_names = [];
+						var count = 0;
+
+						output_render(response,count,array_names);
 					}
 				}
 				else {

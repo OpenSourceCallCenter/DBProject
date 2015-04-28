@@ -24,12 +24,23 @@ exports.do_work = function(req, res){
 		var connection_pool = mysql.createPool(connection);
 		connection_pool.getConnection(function(err, connection){
 	 	  if ( err ){
+	 	  	var msg = "Error connecting to db + " + err;
 	    		console.log("Error connecting to db + " + err);
+	    							res.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
 	    }
 	    console.log("Connected DB");
 	    connection.query("SELECT friend_id FROM Friends WHERE login_id='" + req.newSession.user_id + "'", function(err, rows, fields) {
 				if(err){
+					var msg = "Error while selection into table +" + err;
 					console.log("Error while selection into table +" + err);
+						    							res.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
+
 				}
 				else {
 					// insert into array
@@ -58,7 +69,13 @@ function invite_db(req,res,frnd){
     var member_since = new Date(jsonDate);
     */
     if ( err ){
+    	var msg = "Error connecting to db + " + err;
     	console.log("Error connecting to db + " + err);
+    	res.render('errordisplay.jade', { variables:{
+          title: 'Urban Beats', error: msg
+                                }
+                            });
+
     }
     console.log("Connected DB");
     var transporter = nodemailer.createTransport();
@@ -73,7 +90,13 @@ function invite_db(req,res,frnd){
 		};
 		transporter.sendMail(mailoptions, function(error, info){
 			if(error){
+				var msg = "Error while sending mail + " + error;
 				console.log("Error while sending mail + " + error);
+				res.render('errordisplay.jade', { variables:{
+          title: 'Urban Beats', error: msg
+                                }
+                            });
+
 			}
 			else{
 				console.log("Successfully sent email");
@@ -82,7 +105,13 @@ function invite_db(req,res,frnd){
 
     connection.query("SELECT * FROM Friends WHERE login_id='" + req.newSession.user_id + "' and friend_id='" + frnd + "'", function(err, rows, fields) {
 			if(err){
+				var msg = "Error while selection into table +" + err;
 				console.log("Error while selection into table +" + err);
+				res.render('errordisplay.jade', { variables:{
+          title: 'Urban Beats', error: msg
+                                }
+                            });
+
 			}
 			else{
 				if(rows.length == 0) {
@@ -92,7 +121,13 @@ function invite_db(req,res,frnd){
     				console.log("After Insert Query");
     				//connection.end(); // done with the connection
     				if ( in_err ){
+    					var msg = "Error while inserting into table +" + in_err
 							console.log("Error while inserting into table +" + in_err);
+							res.render('errordisplay.jade', { variables:{
+          			title: 'Urban Beats', error: msg
+                                }
+                            });
+
     				}
     				else{
 							console.log("data successfully inserted into the database");

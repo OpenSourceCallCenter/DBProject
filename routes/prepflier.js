@@ -34,12 +34,24 @@ exports.do_work = function(req, res){
                     }
                 }
                 else {
+                    var msg = "Error while authenticating users through query + " + err;
                     console.log("Error while authenticating users through query + " + err);
+                    res.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
                 }
             });
         }
-        else 
+        else {
+            var msg = "Disconnected DB + " + err;
             console.log("Disconnected DB + " + err);
+                    res.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
+            
+        }
         connection.release();
     });
 };
@@ -88,7 +100,13 @@ function query_db(req,res){
             console.log("Connected DB");
             connection.query("select count(*) as count from Flyer;", function(err, rows, fields) {
     			if(err){
+                    var msg = "Error while selection into table +" + err;
 	   		      console.log("Error while selection into table +" + err);
+                                      res.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
+
 		      	}
 			    else {
                     var flyer_val = 1;
@@ -109,7 +127,13 @@ function query_db(req,res){
         	    	    console.log("After Insert Query");
           	  			//connection.end(); // done with the connection
             			if ( in_err ){
+                            var msg = "Error while inserting into table +" + in_err;
     		  		      console.log("Error while inserting into table +" + in_err);
+                            res.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
+
         	       		}
         			    else{
     					   console.log("data successfully inserted into the database");

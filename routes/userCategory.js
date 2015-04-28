@@ -49,7 +49,13 @@ exports.notifyBusiness = function(request,response)
               console.log("query got executed successfully....");
               if(rows.length==0)
                {
+                var msg = "no records fetched from the database for current filters";
                 console.log("no records fetched from the database");
+                response.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
+
                }  
                else
                 {

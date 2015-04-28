@@ -36,16 +36,31 @@ function query_db(req,response) {
 					else {
 						// display error msg for unauthenticated user
 						console.log("No Logged in Users");
+						                response.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: "No Logged in Users"
+                                }
+                            });
+
 						// display error msg // UI change
 					}
 				}
 				else {
+					var msg = "Error while authenticating users through query + " + err;
 					console.log("Error while authenticating users through query + " + err);
+					response.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
 				}
 			});
 		}
 		else {
+			var msg = "Disconnected DB + " + err;
 			console.log("Disconnected DB + " + err);
+			response.render('errordisplay.jade', { variables:{
+                                title: 'Urban Beats', error: msg
+                                }
+                            });
 		}
 		connection.release();
 	});
