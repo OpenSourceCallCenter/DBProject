@@ -127,7 +127,13 @@ html
     a(href='#') Go Ahead
     |     
     br
-    |     
+    | 
+    form(action='')
+      input#phone(type='text', value='')
+      input(type='submit', value='Submit')
+    |
+    br
+    |    
     form#calculate-route(name='calculate-route', action='#', method='get')
       label(for='from')
       |       
