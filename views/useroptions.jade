@@ -90,7 +90,7 @@ head
                           - var check = false
                           - if (variables.rating === '4.0')
                             - check = true
-                          input(type= 'checkbox', value='4.0', name='rating', checked = check, onclick="window.location='https://urbanbeatsbeta.herokuapp.com/refineRating?name=rating&value=4.0'; return true;")
+                          input(type= 'checkbox', value='4.0', name='rating', checked = check, onclick="window.location='http://urbanbeatsbeta.herokuapp.com/refineRating?name=rating&value=4.0'; return true;")
                           | &ge; 4.0
                       |                     
                       .checkbox
@@ -98,7 +98,7 @@ head
                           - var check = false
                           - if (variables.rating === '3.0')
                             - check= true  
-                          input(type='checkbox', value='3.0', name='rating', checked = check, onclick="window.location='https://urbanbeatsbeta.herokuapp.com/refineRating?name=rating&value=3.0'; return true;")
+                          input(type='checkbox', value='3.0', name='rating', checked = check, onclick="window.location='http://urbanbeatsbeta.herokuapp.com/refineRating?name=rating&value=3.0'; return true;")
                           | &ge; 3.0
                     |                   
                     li Ambience
@@ -108,7 +108,7 @@ head
                         - var check = false
                         - if (variables.ambience === "casual")
                             - check= true
-                        input(type='checkbox', checked=check, onclick="window.location='https://urbanbeatsbeta.herokuapp.com/refineAmbience?name=ambience&value=casual'; return true;")
+                        input(type='checkbox', checked=check, onclick="window.location='http://urbanbeatsbeta.herokuapp.com/refineAmbience?name=ambience&value=casual'; return true;")
                         | Casual
                     |                     
                     .checkbox
@@ -116,7 +116,7 @@ head
                         - var check = false
                         - if (variables.ambience === "romance")
                             - check= true
-                        input(type='checkbox', checked=check, onclick="window.location='https://urbanbeatsbeta.herokuapp.com/refineAmbience?name=ambience&value=romance'; return true;")
+                        input(type='checkbox', checked=check, onclick="window.location='http://urbanbeatsbeta.herokuapp.com/refineAmbience?name=ambience&value=romance'; return true;")
                         | Romance
                     |                   
                     .checkbox
@@ -124,7 +124,7 @@ head
                         - var check = false
                         - if (variables.ambience === "classy")
                             - check= true
-                        input(type='checkbox', checked=check, onclick="window.location='https://urbanbeatsbeta.herokuapp.com/refineAmbience?name=ambience&value=classy'; return true;")
+                        input(type='checkbox', checked=check, onclick="window.location='http://urbanbeatsbeta.herokuapp.com/refineAmbience?name=ambience&value=classy'; return true;")
                         | Classy
                     |                     
                     .checkbox
@@ -132,7 +132,7 @@ head
                         - var check = false
                         - if (variables.ambience === "trendy")
                             - check= true
-                        input(type='checkbox', checked=check, onclick="window.location='https://urbanbeatsbeta.herokuapp.com/refineAmbience?name=ambience&value=trendy'; return true;")
+                        input(type='checkbox', checked=check, onclick="window.location='http://urbanbeatsbeta.herokuapp.com/refineAmbience?name=ambience&value=trendy'; return true;")
                         | Trendy
                     li Takeout
                     |                   
@@ -141,7 +141,7 @@ head
                         - var check = false
                         - if (variables.takeout === "takeout")
                             - check= true  
-                        input(type='checkbox', checked=check, onclick="window.location='https://urbanbeatsbeta.herokuapp.com/refineTakeout?name=takeout&value=takeout'; return true;")
+                        input(type='checkbox', checked=check, onclick="window.location='http://urbanbeatsbeta.herokuapp.com/refineTakeout?name=takeout&value=takeout'; return true;")
                         | Yes
                     li Delivery
                     |                   
@@ -150,7 +150,7 @@ head
                         - var check = false
                         - if (variables.delivery === "delivery")
                             - check= true    
-                        input(type='checkbox', checked=check, onclick="window.location='https://urbanbeatsbeta.herokuapp.com/refineDelivery?name=delivery&value=delivery'; return true;")
+                        input(type='checkbox', checked=check, onclick="window.location='http://urbanbeatsbeta.herokuapp.com/refineDelivery?name=delivery&value=delivery'; return true;")
                         | Yes
                     li Alcohol
                     |                   
@@ -159,7 +159,7 @@ head
                         - var check = false
                         - if (variables.alcohol === "alcohol")
                             - check= true 
-                        input(type='checkbox', checked=check, onclick="window.location='https://urbanbeatsbeta.herokuapp.com/refineAlcohol?name=alcohol&value=alcohol'; return true;")
+                        input(type='checkbox', checked=check, onclick="window.location='http://urbanbeatsbeta.herokuapp.com/refineAlcohol?name=alcohol&value=alcohol'; return true;")
                         | Yes
                     li Parking
                     |                   
@@ -168,7 +168,7 @@ head
                         - var check = false
                         - if (variables.parking === "parking")
                             - check= true  
-                        input(type='checkbox', checked=check, onclick="window.location='https://urbanbeatsbeta.herokuapp.com/refineParking?name=parking&value=parking'; return true;")
+                        input(type='checkbox', checked=check, onclick="window.location='http://urbanbeatsbeta.herokuapp.com/refineParking?name=parking&value=parking'; return true;")
                         | Yes
                     li Outdoor Seating
                     |                   
@@ -177,7 +177,7 @@ head
                         - var check = false
                         - if (variables.outdoorSeating === "outdoorSeating")
                             - check= true   
-                        input(type='checkbox', checked=check, onclick="window.location='https://urbanbeatsbeta.herokuapp.com/refineOutdoorSeating?name=outdoorSeating&value=outdoorSeating'; return true;")
+                        input(type='checkbox', checked=check, onclick="window.location='http://urbanbeatsbeta.herokuapp.com/refineOutdoorSeating?name=outdoorSeating&value=outdoorSeating'; return true;")
                         | Yes
   form(name='notifyForm', action='/notify', method='post')                        
     table#example.display(cellspacing='0', width='80%')
