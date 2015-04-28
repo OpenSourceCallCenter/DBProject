@@ -55,7 +55,7 @@ passport.use(new FacebookStrategy({
     //clientSecret:'329cba0e2b6eb60c49fec2a31699c96e' ,
     clientID: '826675407413047',
     clientSecret: '97bd866b5ff1c2e1ca7391eb30718bca',
-    callbackURL: 'http://localhost:3000/auth/facebook/callback'
+    callbackURL: 'https://urbanbeats.herokuapp.com/auth/facebook/callback'
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
