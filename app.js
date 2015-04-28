@@ -37,7 +37,6 @@ var invalidatecoupon = require('./routes/invalidate');
 var oldfliers = require('./routes/oldfliers');
 var prepflier = require('./routes/prepflier');
 var userCategory = require('./routes/userCategory');
-var invitefriends = require('./routes/invitefriends');
 var app = express();
 
 // Passport session setup.
@@ -78,6 +77,12 @@ var authenticatebusiness = function (req, res, next) {
     res.redirect('/');
   }
 }
+
+
+var logout= require('./routes/logout');
+var forgotPassword= require('./routes/forgotPassword');
+var availOffer= require('./routes/availoffer');
+var inviteFriends= require('./routes/inviteFriends');
 
 
 passport.use(new FacebookStrategy({
@@ -184,6 +189,15 @@ app.get('/refineAlcohol',authenticate,userCategory.do_work_new);
 app.get('/refineParking',authenticate,userCategory.do_work_new);
 app.get('/refineOutdoorSeating',authenticate,userCategory.do_work_new);
 
+app.get('/logout',logout.do_work);
+
+app.get('/forgotPassword',forgotPassword.do_work_render);
+app.post('/securityQues',forgotPassword.do_work);
+app.post('/emailPassword',forgotPassword.sendEmail);
+app.post('/availOffer',availOffer.do_work);
+app.get('/inviteFriends',inviteFriends.do_work);
+app.post('/sendSMS',inviteFriends.sendSMS);
+
 
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { successRedirect : '/test', failureRedirect: '/login' }),
@@ -198,7 +212,6 @@ app.get('/test', function(req, res){
 });
 
 app.get('/facebook', signin.do_facebooklogin);
-app.get('/invitefriends', authenticate,invitefriends.do_work);
   
 // for sign-in registered business
 app.get('/businesslogin', businesslogin.do_work);

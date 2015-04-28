@@ -13,14 +13,6 @@ var connection = {
   password : 'urbanbeatsdbpwd',
   database : 'UrbanBeatsDB'
 }
-var redis = require('redis');
-var client = redis.createClient(10488,"pub-redis-10488.us-east-1-3.3.ec2.garantiadata.com",{no_ready_check: true});
-if ("urbanbeats") {
-  client.auth("urbanbeats", function() {
-    console.log('Redis client connected');
-  });
-}
-
 
 exports.notifyBusiness = function(request,response)
 {
@@ -57,13 +49,7 @@ exports.notifyBusiness = function(request,response)
               console.log("query got executed successfully....");
               if(rows.length==0)
                {
-                var msg = "no records fetched from the database for current filters";
                 console.log("no records fetched from the database");
-                response.render('errordisplay.jade', { variables:{
-                                title: 'Urban Beats', error: msg
-                                }
-                            });
-
                }  
                else
                 {
@@ -87,16 +73,10 @@ exports.notifyBusiness = function(request,response)
                          {
                             console.log("value of no_of_views got updated successfully");
                             // obtain the reviews of the corresponding business
-                            connection.query("SELECT review_id,business_id,text FROM Review WHERE business_id IN "+finalStr,function(err,review,fields)
+                            connection.query("SELECT text FROM Review WHERE business_id IN "+finalStr,function(err,review,fields)
                               {
                                   if(!err)
                                    {
-                                    rows.forEach(function(element, index, array){
-                                      client.set('user:'+element.review_id, review[0].text, redis.print);
-                                      client.get("user:"+element.review_id, function (err, reply) {
-                                      console.log(reply);
-                                      });
-                                    });
                                      console.log("reviews fetched successfully..."+review[0].text);
                                      redirect_notify(response,request.newSession.filteredResults,flyerIds,flyerCoupons,review);
 
@@ -123,7 +103,14 @@ exports.notifyBusiness = function(request,response)
              }  
               
             });
+
+
+        
             console.log("length of flyerCoupons..."+flyerCoupons.length);
+
+          
+       
+         
         connection.release();
        
     }); 
@@ -163,17 +150,19 @@ exports.do_work = function(request,response)
     } 
     */
 
-    // testing Day and time for Business_Hours 
+    // testing Day and time for Business_Hours
+    /* 
     var day = moment().format('dddd');
     var time = String(moment().format('HH:mm'));
     //var open = moment("17:00", "HH:mm");
     //var close = moment("23:00", "HH:mm");
     var open = "17:00";
     var close = "23:00";
+    /*
     console.log("[compare]");
     console.log((open <= time) && (close >= time))
     console.log("[day-time] Day + " + day + " Time +  " + time);
-
+    */
     request.newSession.category = true;
     request.newSession.hasCategory = request.body.category;
     request.newSession.city = true;
@@ -199,7 +188,7 @@ exports.do_work = function(request,response)
  exports.do_work_new = function(request,response)
   {
      console.log("inside do_work_new");
-     
+     console.log("Category is...."+request.newSession.hasCategory);
      console.log("Request Body here...."+request.query);
      var checkBoxArray=request.query;
      var arr = Object.keys(checkBoxArray).map(function(key)
@@ -358,6 +347,13 @@ function codeLatLng(lat, lng)
   {
     var category;
     var dbQuery;
+    var day = moment().format('dddd');
+    //var time = String(moment().format('HH:mm'));
+    var time="11:00";
+    //var open = moment("17:00", "HH:mm");
+    //var close = moment("23:00", "HH:mm");
+    var open = "17:00";
+    var close = "23:00";
     
     var connection_pool = mysql.createPool(connection);
     connection_pool.getConnection(function(err, connection)
@@ -372,14 +368,16 @@ function codeLatLng(lat, lng)
 
              dbQuery="SELECT name,TEMP.business_id,full_address,stars,review_count FROM";
 
-             if(request.newSession.city)
-              {
+             //if(request.newSession.city)
+              //{
+            	 console.log("Inside city");
                  dbQuery=dbQuery+" (SELECT name,business_id,full_address,stars,review_count FROM Business WHERE Business.city='Las Vegas') TEMP"
-              }            
-              if(request.newSession.category)
-               {
-                dbQuery=dbQuery+" INNER JOIN Business_Categories ON TEMP.business_id=Business_Categories.business_id INNER JOIN Categories ON Business_Categories.category_id=Categories.category_id INNER JOIN Attributes ON TEMP.business_id=Attributes.business_id WHERE Categories.category_name='"+request.newSession.hasCategory+"'"
-               } 
+              //}            
+              //if(request.newSession.category)
+               //{
+            	  console.log("Inside category");
+                dbQuery=dbQuery+" INNER JOIN (SELECT business_id FROM Business_Hours WHERE day='"+day+"' and open<= '"+time+"' and close>= '"+time+"')TEMPHOURS ON TEMP.business_id=TEMPHOURS.business_id INNER JOIN Business_Categories ON TEMP.business_id=Business_Categories.business_id INNER JOIN Categories ON Business_Categories.category_id=Categories.category_id INNER JOIN Attributes ON TEMP.business_id=Attributes.business_id WHERE Categories.category_name='"+request.newSession.hasCategory+"'"
+               //} 
                if(request.newSession.rating)
                {
                  dbQuery=dbQuery+" and stars>="+request.newSession.hasRating
@@ -409,7 +407,7 @@ function codeLatLng(lat, lng)
                {
                  dbQuery=dbQuery+" and Attributes.outdoor_seating=1";
                }
-                dbQuery=dbQuery+" LIMIT 5";
+                //dbQuery=dbQuery+" LIMIT 5";
 
                //if(request.session.)
                console.log("final query string...."+dbQuery)
@@ -427,6 +425,11 @@ function codeLatLng(lat, lng)
                     } 
                   else
                    {
+                	  for(var i=0;i<business_rows_results.length;i++)
+                		 {
+                		  
+                		       console.log("Business_id......"+business_rows_results[i].business_id);
+                		 } 
                       connection.query("select name, flyer_coupon from ( select name, business_id from Business where is_premium = 'yes' ) TempBus inner join ( select flyer_coupon, business_id from Flyer where is_accepted = 'yes') TempFly on TempBus.business_id = TempFly.business_id order by RAND() limit 3;", function(err, rows, fields) {
                         if (!err) {
                           if (rows.length > 0 ) {

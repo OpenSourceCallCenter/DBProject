@@ -89,7 +89,7 @@ html
       });
       $("#calculate-route").submit(function(event) {
       event.preventDefault();
-      var to=new google.maps.LatLng(40.415517000000001,-80.067533999999995);
+      var to=new google.maps.LatLng(#{variables.business[0].Latitude},#{variables.business[0].Longitute});
       //calculateRoute($("#from").val(), $("#to").val());
       calculateRoute($("#from").val(), to);
       });
@@ -110,7 +110,7 @@ html
       .container.topnav
         // Brand and toggle get grouped for better mobile display
         .navbar-header
-          a.navbar-brand.topnav1(href='index.html')
+          a.navbar-brand.topnav1(href='/')
             b Urban Beats
       // /.container
     |     
@@ -124,14 +124,14 @@ html
     |     
     h3 Wanna share it with your friends?
     |     
-    a(href='#') Go Ahead
+    a(href='/inviteFriends') Go Ahead
     |     
     br
     | 
-    form(action='')
-      input#phone(type='text', value='')
-      input(type='submit', value='Submit')
-    |
+    form(action='/sendSMS',method='post')
+      h4 Enter the phone number to receive your coupon
+      input#phone(type='text', value='', name='phone')
+      input(type='submit', value='Send SMS')
     br
     |    
     form#calculate-route(name='calculate-route', action='#', method='get')
