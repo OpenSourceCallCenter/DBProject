@@ -13,6 +13,14 @@ var connection = {
   password : 'urbanbeatsdbpwd',
   database : 'UrbanBeatsDB'
 }
+var redis = require('redis');
+var client = redis.createClient(10488,"pub-redis-10488.us-east-1-3.3.ec2.garantiadata.com",{no_ready_check: true});
+if ("urbanbeats") {
+  client.auth("urbanbeats", function() {
+    console.log('Redis client connected');
+  });
+}
+
 
 exports.notifyBusiness = function(request,response)
 {
@@ -79,10 +87,16 @@ exports.notifyBusiness = function(request,response)
                          {
                             console.log("value of no_of_views got updated successfully");
                             // obtain the reviews of the corresponding business
-                            connection.query("SELECT text FROM Review WHERE business_id IN "+finalStr,function(err,review,fields)
+                            connection.query("SELECT review_id,business_id,text FROM Review WHERE business_id IN "+finalStr,function(err,review,fields)
                               {
                                   if(!err)
                                    {
+                                    rows.forEach(function(element, index, array){
+                                      client.set('user:'+element.review_id, review[0].text, redis.print);
+                                      client.get("user:"+element.review_id, function (err, reply) {
+                                      console.log(reply);
+                                      });
+                                    });
                                      console.log("reviews fetched successfully..."+review[0].text);
                                      redirect_notify(response,request.newSession.filteredResults,flyerIds,flyerCoupons,review);
 
@@ -109,14 +123,7 @@ exports.notifyBusiness = function(request,response)
              }  
               
             });
-
-
-        
             console.log("length of flyerCoupons..."+flyerCoupons.length);
-
-          
-       
-         
         connection.release();
        
     }); 

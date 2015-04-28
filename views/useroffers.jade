@@ -7,32 +7,16 @@ html
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
     script(src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js')
     script(type='text/javascript').
-      $(document).ready(function() {
-      $(function() {
-      $('#dialog').dialog({
-      autoOpen: false
-      });
-      $('#uniquename').on('click', function() {
-      if ($('#uniquename').prop('checked') == true)
-      $('#dialog').dialog('open');
-      });
-      });
-      // Validating Form Fields.....
-      $('#submit').click(function(e) {
-      var email = $('#email').val();
-      var name = $('#name').val();
-      var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-      if (email === '' || name === '') {
-      alert('Please fill all fields...!!!!!!');
-      e.preventDefault();
-      } else if (!(email).match(emailReg)) {
-      alert('Invalid Email...!!!!!!');
-      e.preventDefault();
-      } else {
-      alert('Form Submitted Successfully......');
+      function HideContent(d) {
+      document.getElementById(d).style.display = "none";
       }
-      });
-      });
+      function ShowContent(d) {
+      document.getElementById(d).style.display = "block";
+      }
+      function ReverseDisplay(d) {
+      if(document.getElementById(d).style.display == "none") { document.getElementById(d).style.display = "block"; }
+      else { document.getElementById(d).style.display = "none"; }
+      }
       function disableHandler (form, inputName) {
       var inputs = form.elements[inputName];
       for (var i = 0; i < inputs.length; i++) {
@@ -82,7 +66,7 @@ html
       }
       th, td {
       overflow: hidden;
-      width: 100px;
+      width: 200px;
       height: 125px;
       vertical-align: top;
       padding: 5px;
@@ -96,13 +80,13 @@ html
       .container.topnav
         // Brand and toggle get grouped for better mobile display
         .navbar-header
-          a.navbar-brand.topnav1(href='/')
+          a.navbar-brand.topnav1(href='skins/litecube/')
             b Urban Beats
       // /.container
     |   
     |     
     .container
-      form(name='aForm', role='form')
+      form(name='aForm', role='form', action='/availOffer', method='post')
         .form-group
           h2
             br
@@ -124,21 +108,31 @@ html
                   th Flyers
                   th Who
                   th Where
+                  th Want Reviews?
               |         
               tbody
                 - each item,index in variables.flyerCoupons
                   tr
                     td
-                      #dialog(title='Reviews')
-                        form(action='', method='post')
-                          p something
-                      input#uniquename(type='checkbox', name='finallevelusers[]')
+                      - var unq = 'unique'+index
+                      input(id=unq, type='checkbox', name='finallevelusers[]', value='#{variables.business[index].business_id};#{variables.flyerIds[index]}')
                     td
                       p= item
                     td
                       p(style='color:black;background-image: none;')= variables.business[index].name
                     td
                       p(style='color:black;background-image: none;')= variables.business[index].full_address 
+                    td
+                      - var unq = 'uniquename'+index
+                      a(href="javascript:ShowContent('#{unq}')" )
+                        | Show Reviews  
+                      div(id=unq, style='display:none;')
+                        p(style='font-size:15px;color:black;background-image: none;')= variables.review[0].text
+                        a(href="javascript:HideContent('#{unq}')")
+                          | Hide Reviews
+                    td(style='visibility:hidden')
+                      input(type='text', name='business_id', value=variables.business[index].business_id)
+                      input(type='text', name='flyer_id', value=variables.flyerIds[index])
             | &#x9;  
     | &#x9;
     |  

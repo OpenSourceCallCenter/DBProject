@@ -195,6 +195,8 @@ app.post('/updateflier', oldfliers.do_updateflier);
 app.get('/prepflier', prepflier.do_work);
 app.post('/addflier', prepflier.do_addflier);
 
+app.post('/notify',userCategory.notifyBusiness);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
